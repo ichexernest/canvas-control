@@ -4,7 +4,7 @@ import { Wrapper, Box, Canvas, BoxText } from './DetailCanvas.styles';
 import testImg from '../../images/caseA0827_save_ref_1.jpg';
 import { PanZoom } from 'react-easy-panzoom'
 
-const DetailCanvas = ({target}) => {
+const DetailCanvas = ({currImage, target}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
     //const [coordinates, setCoordinates] = useState([]);
@@ -18,7 +18,7 @@ const DetailCanvas = ({target}) => {
         // // draw all coordinates held in state
         // coordinates.forEach((coordinate)=>{draw(ctx, coordinate)});
         const img = new Image();
-        img.src = testImg;
+        img.src = currImage;
         img.onload = () => {
             canvasObj.width = target.width;
             canvasObj.height = target.height;
@@ -42,7 +42,7 @@ const DetailCanvas = ({target}) => {
         // // draw all coordinates held in state
         // coordinates.forEach((coordinate)=>{draw(ctx, coordinate)});
         const img2 = new Image();
-        img2.src = testImg;
+        img2.src = currImage;
         img2.onload = () => {
             canvasObj2.width = target.width;
             canvasObj2.height = target.height;

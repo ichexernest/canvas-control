@@ -50,7 +50,8 @@ const ContentArea = () => {
             ...currentTarget
         })
     }
-    const handleCurrImage = () => {
+    const handleCurrImage = (img) => {
+        setCurrImage(img);
     }
     const handleCheck = () => {
     }
@@ -82,7 +83,7 @@ const ContentArea = () => {
                         })}
                     </ul>
                 </ContentList>
-                <ContentCanvas target={currImage, target.rect} />
+                <ContentCanvas currImage={currImage} target={target.rect} />
             </ContentWrapper>
             <ControlBar>
                 <h3>detection_check_area</h3>
@@ -100,7 +101,7 @@ const ContentArea = () => {
                         <Button disabled={target.pass || (target.ocrSSIM > 0.9 && !target.pass)} onClick={() => handleCheck()}>manual checked</Button>
                     </CheckContent>
                 </DetailInfo>
-                <DetailCanvas target={target.rect} />
+                <DetailCanvas currImage={currImage} target={target.rect} />
             </DetailWrapper>
 
         </Wrapper>
