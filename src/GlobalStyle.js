@@ -17,8 +17,8 @@ export const GlobalStyle = createGlobalStyle`
     --btnActionColor:rgb(126, 109, 199);
     --btnDisabledColor:rgb(163, 159, 179);
     --bgMaskColor: #dddddd;
-    --bgError: rgb(232, 139, 139);
-    --bgSuccess:rgb(53, 181, 115);
+    --bgError: rgb(242, 102, 102);
+    --bgSuccess:rgb(0, 196, 10);
 }
 
 *{

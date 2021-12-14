@@ -1,11 +1,9 @@
-import { useState } from "react";
+//import { useState } from "react";
 import styled from "styled-components";
 
 //const { useState } = React;
 import Sidebar from "./Sidebar";
 import ContentArea from "./ContentArea";
-import ContentCanvas from './ContentCanvas';
-import DetailCanvas from './DetailCanvas';
 
 
 const Home = () => {

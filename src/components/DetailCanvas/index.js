@@ -1,29 +1,24 @@
-import { React, useEffect, useRef, useState } from "react";
-import { useCanvas } from '../../hooks/useCanvas';
+import { React, useEffect, useRef } from "react";
 import { Wrapper, Box, Canvas, BoxText } from './DetailCanvas.styles';
-import testImg from '../../images/caseA0827_save_ref_1.jpg';
+//import testImg from '../../images/caseA0827_save_ref_1.jpg';
 import { PanZoom } from 'react-easy-panzoom'
 
-const DetailCanvas = ({currImage, target}) => {
+const DetailCanvas = ({srcImage,refImage, target}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
-    //const [coordinates, setCoordinates] = useState([]);
 
     useEffect(() => {
-        const canvasObj = canvasRef.current;
-        const ctx = canvasObj.getContext('2d');
-        // clear the canvas area before rendering the coordinates held in state
-        //ctx.clearRect( 0,0, canvasWidth, canvasHeight );
 
-        // // draw all coordinates held in state
-        // coordinates.forEach((coordinate)=>{draw(ctx, coordinate)});
-        const img = new Image();
-        img.src = currImage;
-        img.onload = () => {
-            canvasObj.width = target.width;
-            canvasObj.height = target.height;
-            ctx.drawImage(
-                img, 
+        //source canvas area
+        const canvasSrcObj = canvasSrc.current;
+        const canvasSrcCtx = canvasSrcObj.getContext('2d');
+        const imgSrc = new Image();
+        imgSrc.src = srcImage;
+        imgSrc.onload = () => {
+            canvasSrcObj.width = target.width;
+            canvasSrcObj.height = target.height;
+            canvasSrcCtx.drawImage(
+                imgSrc, 
                 target.x, 
                 target.y, 
                 target.width, 
@@ -34,20 +29,16 @@ const DetailCanvas = ({currImage, target}) => {
                 );
         }
 
-        const canvasObj2 = canvasSrc.current;
-        const ctx2 = canvasObj2.getContext('2d');
-        // clear the canvas area before rendering the coordinates held in state
-        //ctx.clearRect( 0,0, canvasWidth, canvasHeight );
-
-        // // draw all coordinates held in state
-        // coordinates.forEach((coordinate)=>{draw(ctx, coordinate)});
-        const img2 = new Image();
-        img2.src = currImage;
-        img2.onload = () => {
-            canvasObj2.width = target.width;
-            canvasObj2.height = target.height;
-            ctx2.drawImage(
-                img, 
+        //reference canvas area
+        const canvasRefObj = canvasRef.current;
+        const canvasRefCtx = canvasRefObj.getContext('2d');
+        const imgRef = new Image();
+        imgRef.src = refImage;
+        imgRef.onload = () => {
+            canvasRefObj.width = target.width;
+            canvasRefObj.height = target.height;
+            canvasRefCtx.drawImage(
+                imgRef, 
                 target.x, 
                 target.y, 
                 target.width, 
@@ -66,7 +57,7 @@ const DetailCanvas = ({currImage, target}) => {
                     boundaryRatioVertical={0.9}
                     boundaryRatioHorizontal={0.9}
                     enableBoundingBox>
-                    <Canvas ref={canvasRef} />
+                    <Canvas ref={canvasSrc} />
                 </PanZoom>
             </Box>
             <Box>
@@ -75,7 +66,7 @@ const DetailCanvas = ({currImage, target}) => {
                     boundaryRatioVertical={0.9}
                     boundaryRatioHorizontal={0.9}
                     enableBoundingBox>
-                    <Canvas ref={canvasSrc} />
+                    <Canvas ref={canvasRef} />
                 </PanZoom>
             </Box>
         </Wrapper>

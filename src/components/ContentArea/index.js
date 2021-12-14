@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import classNames from 'classnames';
 import { Wrapper, ActionGroup, ControlBar, ContentWrapper, DetailWrapper, ContentList, Button, DetailInfo, InfoContent, CheckContent } from './ContentArea.styles';
 
@@ -22,6 +22,7 @@ const ContentArea = () => {
         ]
     };
     const [activeId, setActiveId] = useState();
+    const [disabled, setDisabled] = useState(true);
     const [targets, setTargets] = useState(targetList);
     const [target, setTarget] = useState(
         {
@@ -45,15 +46,17 @@ const ContentArea = () => {
     const handleSelectTarget = (i) => {
         setActiveId(i)
         let currentTarget = targets.sets[i];
-        console.log(`click index ${i} `)
         setTarget({
             ...currentTarget
         })
+        setDisabled(currentTarget.pass || currentTarget.ocrSSIM ==1 ? true: false);
     }
     const handleCurrImage = (img) => {
         setCurrImage(img);
     }
-    const handleCheck = () => {
+    const handleCheck = (index) => {
+        setTarget({})
+
     }
 
 
@@ -74,7 +77,8 @@ const ContentArea = () => {
                         {targets.sets.map((item, index) => {
 
                             let liClasses = classNames({
-                                'error': (item.ocrSSIM < 1 && item.pass) ? true : false,
+                                'success': (item.ocrSSIM < 1 && item.pass) ? true : false,
+                                'error': (item.ocrSSIM < 1 && !item.pass) ? true : false,
                                 'active': (activeId === index) ? true : false,
                             });
                             return (
@@ -98,10 +102,10 @@ const ContentArea = () => {
                         <strong>qatm score:</strong>{target.qatm_score}<br />
                     </InfoContent>
                     <CheckContent>
-                        <Button disabled={target.pass || (target.ocrSSIM > 0.9 && !target.pass)} onClick={() => handleCheck()}>manual checked</Button>
+                        <Button disabled={disabled} onClick={() => handleCheck(target.boxIndex)}>manual checked</Button>
                     </CheckContent>
                 </DetailInfo>
-                <DetailCanvas currImage={currImage} target={target.rect} />
+                <DetailCanvas srcImage={currImage} refImage={currImage} target={target.rect} />
             </DetailWrapper>
 
         </Wrapper>
