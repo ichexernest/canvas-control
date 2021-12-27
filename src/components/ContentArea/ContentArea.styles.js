@@ -12,14 +12,14 @@ display: flex;
 justify-content: space-between;
 background-color: var(--bgColor);
 align-items: center;
-max-height: 5%;
-min-height: 5%;
+max-height: 7%;
+min-height: 7%;
 border-bottom: 1px solid var(--lightGrey);
 `;
 export const ContentWrapper = styled.div`
 width: 100%;
-max-height: 60%;
-min-height: 60%;
+max-height: 56%;
+min-height: 56%;
 display: flex;
 flex-direction: row;
 flex: 1;
