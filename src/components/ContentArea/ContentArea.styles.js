@@ -47,6 +47,9 @@ a{
 a:hover{
     background: var(--lightGrey);
 }
+.active{
+    background-color: var(--btnActionColor);
+}
 `;
 export const ContentList = styled.div`
 position: relative;

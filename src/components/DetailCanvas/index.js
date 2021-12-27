@@ -3,7 +3,7 @@ import { Wrapper, Box, Canvas, BoxText } from './DetailCanvas.styles';
 //import testImg from '../../images/caseA0827_save_ref_1.jpg';
 import { PanZoom } from 'react-easy-panzoom'
 
-const DetailCanvas = ({srcImage,refImage, target}) => {
+const DetailCanvas = ({srcFile,refFile, target}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
 
@@ -13,7 +13,7 @@ const DetailCanvas = ({srcImage,refImage, target}) => {
         const canvasSrcObj = canvasSrc.current;
         const canvasSrcCtx = canvasSrcObj.getContext('2d');
         const imgSrc = new Image();
-        imgSrc.src = srcImage;
+        imgSrc.src = srcFile;
         imgSrc.onload = () => {
             canvasSrcObj.width = target.width;
             canvasSrcObj.height = target.height;
@@ -33,7 +33,7 @@ const DetailCanvas = ({srcImage,refImage, target}) => {
         const canvasRefObj = canvasRef.current;
         const canvasRefCtx = canvasRefObj.getContext('2d');
         const imgRef = new Image();
-        imgRef.src = refImage;
+        imgRef.src = refFile;
         imgRef.onload = () => {
             canvasRefObj.width = target.width;
             canvasRefObj.height = target.height;

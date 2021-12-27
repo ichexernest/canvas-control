@@ -3,14 +3,14 @@ import { Wrapper, Canvas } from './ContentCanvas.styles';
 //import testImg from '../../images/caseA0827_save_ref_1.jpg';
 import { PanZoom } from 'react-easy-panzoom'
 
-const ContentCanvas = ({currImage,target}) => {
+const ContentCanvas = ({currFile,target}) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
         const canvasObj = canvasRef.current;
         const ctx = canvasObj.getContext('2d');
         const img = new Image();
-        img.src = currImage;
+        img.src = currFile;
         img.onload = () => {
             canvasObj.height = img.height;
             canvasObj.width = img.width;
