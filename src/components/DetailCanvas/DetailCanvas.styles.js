@@ -8,7 +8,7 @@ flex-direction:column;
 flex: 4;
 `;
 export const Box = styled.div`
-border-bottom:1px solid var(--medGrey);
+border-bottom:1px solid var(--lightGrey);
 position:relative;
 overflow:hidden;
 flex:1;
@@ -30,5 +30,5 @@ background-color: var(--bgMaskColor);
 border: 5px;
 width: 100%;
 height: 100%;
-border-color: black;
+border-color: var(--lightGrey);
 `;      

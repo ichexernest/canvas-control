@@ -5,7 +5,7 @@ import { Wrapper, ActionGroup, ControlBar, ContentWrapper, DetailWrapper, Conten
 import ContentCanvas from '../ContentCanvas';
 import DetailCanvas from '../DetailCanvas';
 
-const ContentArea = () => {
+const ContentArea = ({fileName,pageIndex}) => {
     const initList = {
         "page": 0,
         "filePathSets": [],
@@ -34,12 +34,13 @@ const ContentArea = () => {
     const [targets, setTargets] = useState(initList); //main data
 
     useEffect(() => {
-        fetchTargetList()
-    }, [])
+        fetchTargetList(pageIndex)
+    }, [pageIndex])
 
-    const fetchTargetList = () => {
+    const fetchTargetList = (pageIndex) => {
+        
         const responseData = {
-            "page": 10,
+            "page": pageIndex,
             "filePathSets": [
                 "https://avatars.githubusercontent.com/u/8511318?v=4",
                 "https://avatars.githubusercontent.com/u/14338007?v=4",
@@ -74,7 +75,7 @@ const ContentArea = () => {
     return (
         <Wrapper>
             <ControlBar>
-                <h3>page_title</h3>
+                <h3>{`${fileName} page:${targets.page}`}</h3>
                 <ActionGroup>
                     {targets.filePathSets.map((item, index) => {
                         const btnTextIndex = ["source", "reference", "original overlay", "align overlay"];
@@ -105,9 +106,6 @@ const ContentArea = () => {
                 </ContentList>
                 <ContentCanvas currFile={targets.filePathSets[activePathId]} target={targets.sets[activeTargetId].rect} />
             </ContentWrapper>
-            <ControlBar>
-                <h3>detection_check_area</h3>
-            </ControlBar>
             <DetailWrapper>
                 <DetailInfo>
                     <InfoContent>

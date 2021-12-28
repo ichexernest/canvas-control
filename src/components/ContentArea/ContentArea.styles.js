@@ -18,18 +18,18 @@ border-bottom: 1px solid var(--lightGrey);
 `;
 export const ContentWrapper = styled.div`
 width: 100%;
-max-height: 56%;
-min-height: 56%;
+max-height: 53%;
+min-height: 53%;
 display: flex;
 flex-direction: row;
 flex: 1;
 justify-content: stretch;
-border-bottom: 1px solid #cccccc;
+border-bottom: 2px solid var(--lightGrey);
 `;
 export const DetailWrapper = styled.div`
 width: 100%;
-max-height: 30%;
-min-height: 30%;
+max-height: 40%;
+min-height: 40%;
 display: flex;
 flex-direction: row;
 flex: 1;
