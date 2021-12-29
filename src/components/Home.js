@@ -78,7 +78,7 @@ const Home = () => {
                     <h3>文件辨識檢視系統</h3>
                 </Title>
                 <ul>
-                    {pages !== null ?
+                    {pages !== null &&
                         pages.pages.map((item, index) => {
                             let liClasses = classNames({
                                 'active': (activePageId === index) ? true : false,
@@ -88,13 +88,10 @@ const Home = () => {
                                     <img src={item.filePathSets} alt={item.page} />
                                     page: {item.page}
                                 </li>)
-                        })
-                        : null}
+                        })}
                 </ul>
             </Sidebar>
-            {pages !== null ?
-            <ContentArea fileName={pages.fileName} pageIndex={pages.pages[activePageId].page} />
-            :null}
+            {pages !== null && <ContentArea fileName={pages.fileName} pageIndex={pages.pages[activePageId].page} />}
         </Wrapper>
     );
 }

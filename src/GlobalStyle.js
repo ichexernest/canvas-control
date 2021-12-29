@@ -91,4 +91,25 @@ body{
             cursor: pointer;
         }
     }
-}`
+}
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--bgColor);
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--lightGrey);
+  border-radius:1px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--btnDisabledColor);
+}
+`

@@ -24,7 +24,7 @@ display: flex;
 flex-direction: row;
 flex: 1;
 justify-content: stretch;
-border-bottom: 2px solid var(--lightGrey);
+border-bottom: 1px solid var(--lightGrey);
 `;
 export const DetailWrapper = styled.div`
 width: 100%;
