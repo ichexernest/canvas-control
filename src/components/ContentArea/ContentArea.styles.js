@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
 position: relative;
 display: flex;
 flex-direction: column;
-height: 100vh;
+height: 92vh;
 flex: 5;
 `;
 export const ControlBar = styled.div`
@@ -40,7 +40,7 @@ export const ActionGroup = styled.div`
 position: relative;
 display: inline-flex;
 vertical-align: middle;
-padding:0 20px;
+padding:0 5px;
 a{
     padding:10px;
 }
