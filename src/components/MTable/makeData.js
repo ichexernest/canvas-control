@@ -42,7 +42,7 @@ const newFile = () => {
       statusChance > 0.9
         ? '通過'
         : '不通過',
-    查詢比對結果:  namor.generate({ words: 1, numbers: 0 }),
+    查詢比對結果: namor.generate({ words: 1, numbers: 0 }),
   }
 }
 

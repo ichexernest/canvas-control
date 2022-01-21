@@ -1,12 +1,14 @@
 import { React, useState, useMemo } from 'react'
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, useBlockLayout } from 'react-table'
 // A great library for fuzzy filtering/sorting items
 import { matchSorter } from 'match-sorter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { Wrapper, BWrapper, BContent } from './MainTable.styles'
+import { FixedSizeList } from 'react-window'
 import SearchBar from '../SearchBar'
 import makeData from './makeData'
+import scrollbarWidth from './ScrollBarWidth'
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -59,127 +61,6 @@ function DefaultColumnFilter({
     )
 }
 
-// This is a custom filter UI for selecting
-// a unique option from a list
-function SelectColumnFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-}) {
-    // Calculate the options for filtering
-    // using the preFilteredRows
-    const options = useMemo(() => {
-        const options = new Set()
-        preFilteredRows.forEach(row => {
-            options.add(row.values[id])
-        })
-        return [...options.values()]
-    }, [id, preFilteredRows])
-
-    // Render a multi-select box
-    return (
-        <select
-            value={filterValue}
-            onChange={e => {
-                setFilter(e.target.value || undefined)
-            }}
-        >
-            <option value="">All</option>
-            {options.map((option, i) => (
-                <option key={i} value={option}>
-                    {option}
-                </option>
-            ))}
-        </select>
-    )
-}
-
-// This is a custom filter UI that uses a
-// slider to set the filter value between a column's
-// min and max values
-function SliderColumnFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-}) {
-    // Calculate the min and max
-    // using the preFilteredRows
-
-    const [min, max] = useMemo(() => {
-        let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-        let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-        preFilteredRows.forEach(row => {
-            min = Math.min(row.values[id], min)
-            max = Math.max(row.values[id], max)
-        })
-        return [min, max]
-    }, [id, preFilteredRows])
-
-    return (
-        <>
-            <input
-                type="range"
-                min={min}
-                max={max}
-                value={filterValue || min}
-                onChange={e => {
-                    setFilter(parseInt(e.target.value, 10))
-                }}
-            />
-            <button onClick={() => setFilter(undefined)}>Off</button>
-        </>
-    )
-}
-
-// This is a custom UI for our 'between' or number range
-// filter. It uses two number boxes and filters rows to
-// ones that have values between the two
-function NumberRangeColumnFilter({
-    column: { filterValue = [], preFilteredRows, setFilter, id },
-}) {
-    const [min, max] = useMemo(() => {
-        let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-        let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0
-        preFilteredRows.forEach(row => {
-            min = Math.min(row.values[id], min)
-            max = Math.max(row.values[id], max)
-        })
-        return [min, max]
-    }, [id, preFilteredRows])
-
-    return (
-        <div
-            style={{
-                display: 'flex',
-            }}
-        >
-            <input
-                value={filterValue[0] || ''}
-                type="number"
-                onChange={e => {
-                    const val = e.target.value
-                    setFilter((old = []) => [val ? parseInt(val, 10) : undefined, old[1]])
-                }}
-                placeholder={`Min (${min})`}
-                style={{
-                    width: '70px',
-                    marginRight: '0.5rem',
-                }}
-            />
-            to
-            <input
-                value={filterValue[1] || ''}
-                type="number"
-                onChange={e => {
-                    const val = e.target.value
-                    setFilter((old = []) => [old[0], val ? parseInt(val, 10) : undefined])
-                }}
-                placeholder={`Max (${max})`}
-                style={{
-                    width: '70px',
-                    marginLeft: '0.5rem',
-                }}
-            />
-        </div>
-    )
-}
-
 function fuzzyTextFilterFn(rows, id, filterValue) {
     return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
 }
@@ -213,9 +94,12 @@ function Table({ columns, data }) {
         () => ({
             // Let's set up our default Filter UI
             Filter: DefaultColumnFilter,
+            width: 150,
         }),
         []
     )
+
+    const scrollBarSize = React.useMemo(() => scrollbarWidth(), [])
 
     const {
         getTableProps,
@@ -225,6 +109,7 @@ function Table({ columns, data }) {
         prepareRow,
         state,
         visibleColumns,
+        totalColumnsWidth,
         preGlobalFilteredRows,
         setGlobalFilter,
     } = useTable(
@@ -234,13 +119,38 @@ function Table({ columns, data }) {
             defaultColumn, // Be sure to pass the defaultColumn option
             filterTypes,
         },
+        useBlockLayout,
         useFilters, // useFilters!
         useGlobalFilter // useGlobalFilter!
     )
 
     // We don't want to render all of the rows for this example, so cap
     // it for this use case
-    const firstPageRows = rows.slice(0, 10)
+    //const firstPageRows = rows.slice(0, 10)
+
+    const RenderRow = React.useCallback(
+        ({ index, style }) => {
+            const row = rows[index]
+            prepareRow(row)
+            return (
+                <div
+                    {...row.getRowProps({
+                        style,
+                    })}
+                    className="tr"
+                >
+                    {row.cells.map(cell => {
+                        return (
+                            <div {...cell.getCellProps()} className="td">
+                                {cell.render('Cell')}
+                            </div>
+                        )
+                    })}
+                </div>
+            )
+        },
+        [prepareRow, rows]
+    )
 
     return (
         <>
@@ -249,6 +159,7 @@ function Table({ columns, data }) {
                 globalFilter={state.globalFilter}
                 setGlobalFilter={setGlobalFilter}
             />
+
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map(headerGroup => (
@@ -257,12 +168,11 @@ function Table({ columns, data }) {
                                 <th {...column.getHeaderProps()}>
                                     {column.render('Header')}
                                     {/* Render the columns filter UI */}
-                                    <div>{column.canFilter ? column.render('Filter') : null}</div>
                                 </th>
                             ))}
                         </tr>
                     ))}
-                    <tr>
+                    {/* <tr>
                         <th
                             colSpan={visibleColumns.length}
                             style={{
@@ -270,23 +180,21 @@ function Table({ columns, data }) {
                             }}
                         >
                         </th>
-                    </tr>
+                    </tr> */}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {firstPageRows.map((row, i) => {
-                        prepareRow(row)
-                        return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                })}
-                            </tr>
-                        )
-                    })}
+                    <FixedSizeList
+                        height={400}
+                        itemCount={rows.length}
+                        itemSize={35}
+                        width={totalColumnsWidth + scrollBarSize}
+                    >
+                        {RenderRow}
+                    </FixedSizeList>
                 </tbody>
             </table>
             <br />
-            <div>Showing the first 20 results of {rows.length} rows</div>
+            <div>Showing the first 10 results of {rows.length} rows</div>
             <div>
                 <pre>
                     <code>{JSON.stringify(state.filters, null, 2)}</code>
@@ -314,48 +222,45 @@ function MainTable() {
     const columns = useMemo(
         () => [
             {
-                Header: 'Name',
-                columns: [
-                    {
-                        Header: 'First Name',
-                        accessor: 'firstName',
-                    },
-                    {
-                        Header: 'Last Name',
-                        accessor: 'lastName',
-                        // Use our custom `fuzzyText` filter on this column
-                        filter: 'fuzzyText',
-                    },
-                ],
+                Header: '案號',
+                accessor: '案號',
             },
             {
-                Header: 'Info',
-                columns: [
-                    {
-                        Header: 'Age',
-                        accessor: 'age',
-                        Filter: SliderColumnFilter,
-                        filter: 'equals',
-                    },
-                    {
-                        Header: 'Visits',
-                        accessor: 'visits',
-                        Filter: NumberRangeColumnFilter,
-                        filter: 'between',
-                    },
-                    {
-                        Header: 'Status',
-                        accessor: 'status',
-                        Filter: SelectColumnFilter,
-                        filter: 'includes',
-                    },
-                    {
-                        Header: 'Profile Progress',
-                        accessor: 'progress',
-                        Filter: SliderColumnFilter,
-                        filter: filterGreaterThan,
-                    },
-                ],
+                Header: '建檔日期',
+                accessor: '建檔日期',
+            },
+            {
+                Header: '說明',
+                accessor: '說明',
+
+            },
+            {
+                Header: '立案人員',
+                accessor: '立案人員',
+
+            },
+            {
+                Header: '通知信箱',
+                accessor: '通知信箱',
+
+            },
+            {
+                Header: '來源文件',
+                accessor: '來源文件',
+
+            },
+            {
+                Header: '比對文件',
+                accessor: '比對文件',
+
+            },
+            {
+                Header: '比對結果',
+                accessor: '比對結果',
+            },
+            {
+                Header: '查詢比對結果',
+                accessor: '查詢比對結果',
             },
         ],
         []

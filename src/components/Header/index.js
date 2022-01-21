@@ -1,10 +1,12 @@
 import { React, useEffect, useRef } from "react";
-import { Wrapper} from './Header.styles';
-
+import { Wrapper,Logo } from './Header.styles';
+import { Link  } from "react-router-dom";
 const Header = () => {
     return (
         <Wrapper>
-                    <h3>文件辨識檢視系統</h3>
+            <Link to='/' style={{ textDecoration: 'none' }}>
+            <Logo>文件辨識檢視系統</Logo>
+            </Link >
         </Wrapper>
     )
 }
