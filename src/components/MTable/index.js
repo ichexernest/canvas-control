@@ -1,9 +1,8 @@
-import { React, useState, useMemo, useRef, useEffect, forwardRef } from 'react'
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, useBlockLayout, usePagination, useRowSelect } from 'react-table'
-// A great library for fuzzy filtering/sorting items
+import { React, useState, useMemo} from 'react'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { Wrapper, BWrapper, BContent, Button } from './MTable.styles'
+import { faSearch,faAngleRight,faAngleLeft,faAngleDoubleRight,faAngleDoubleLeft,faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { Wrapper, SearchWrapper, GlobalContent,PageContent,PageWrapper, Button } from './MTable.styles'
 import makeData from './makeData'
 import { Link } from "react-router-dom";
 
@@ -34,22 +33,51 @@ const DetailLink = ({ values }) => {
     </>
   );
 };
-const IndeterminateCheckbox = forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = useRef()
-    const resolvedRef = ref || defaultRef
+// const IndeterminateCheckbox = forwardRef(
+//   ({ indeterminate, ...rest }, ref) => {
+//     const defaultRef = useRef()
+//     const resolvedRef = ref || defaultRef
 
-    useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
+//     useEffect(() => {
+//       resolvedRef.current.indeterminate = indeterminate
+//     }, [resolvedRef, indeterminate])
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
+//     return (
+//       <>
+//         <input type="checkbox" ref={resolvedRef} {...rest} />
+//       </>
+//     )
+//   }
+// )
+// This is a custom UI for our 'between' or number range
+// filter. It uses two number boxes and filters rows to
+// ones that have values between the two
+const GlobalFilter = ({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+})=> {
+  const count = preGlobalFilteredRows.length
+  const [value, setValue] = useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 200)
+
+  return (
+    <GlobalContent>
+    <FontAwesomeIcon className="icon" icon={faSearch} />
+    <input
+        value={value || ""}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`Search ${count} records...`}
+      />
+  </GlobalContent>
+  )
+}
+
 const Table = ({ columns, data }) => {
   // Use the useTable Hook to send the columns and data to build the table
   const {
@@ -69,46 +97,51 @@ const Table = ({ columns, data }) => {
     setPageSize,
     selectedFlatRows,
     setFilter,
-    state: { pageIndex, pageSize, selectedRowIds },
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    state: { pageIndex, pageSize, selectedRowIds, globalFilter },
   } = useTable({
     columns,
     data
   },
     useFilters,
+    useGlobalFilter,
     usePagination,
-    useRowSelect,
-    hooks => {
-      hooks.visibleColumns.push(columns => [
-        // Let's make a column for selection
-        {
-          id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ])
-    });
+    // useRowSelect,
+    // hooks => {
+    //   hooks.visibleColumns.push(columns => [
+    //     //Let's make a column for selection
+    //     {
+    //       id: 'selection',
+    //       // The header can use the table's getToggleAllRowsSelectedProps method
+    //       // to render a checkbox
+    //       Header: ({ getToggleAllPageRowsSelectedProps }) => (
+    //         <div>
+    //           <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+    //         </div>
+    //       ),
+    //       // The cell can use the individual row's getToggleRowSelectedProps method
+    //       // to the render a checkbox
+    //       Cell: ({ row }) => (
+    //         <div>
+    //           <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+    //         </div>
+    //       ),
+    //     },
+    //     ...columns,
+    //   ])
+    // }
+  );
 
   const [filterInput, setFilterInput] = useState("");
 
   // Update the state when input changes
   const handleFilterChange = e => {
     const value = e.target.value || undefined;
-    setFilter("建檔日期", value); // Update the show.name filter. Now our table will filter and show only the rows which have a matching value
+    setFilter("說明", value); // Update the show.name filter. Now our table will filter and show only the rows which have a matching value
     setFilterInput(value);
   };
+
 
   /* 
     Render the UI for your table
@@ -116,11 +149,13 @@ const Table = ({ columns, data }) => {
   */
   return (
     <>
-      <input
-        value={filterInput}
-        onChange={handleFilterChange}
-        placeholder={"Search Date"}
+      <SearchWrapper>
+      <GlobalFilter
+        preGlobalFilteredRows={preGlobalFilteredRows}
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
       />
+      </SearchWrapper>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -144,31 +179,24 @@ const Table = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      {/* 
-        Pagination can be built however you'd like. 
-        This is just a very basic UI implementation:
-      */}
-      <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
+      <PageWrapper>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <FontAwesomeIcon className="icon" icon={faAngleDoubleLeft} />
+        </Button>
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <FontAwesomeIcon className="icon" icon={faAngleLeft} />
+        </Button>
         <span>
-          Page{' '}
-          <strong>
             {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </span>
-        <span>
-          | Go to page:{' '}
+          </span>
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
+        <FontAwesomeIcon className="icon" icon={faAngleRight} />
+        </Button>
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <FontAwesomeIcon className="icon" icon={faAngleDoubleRight} />
+        </Button>
+          <PageContent>
+          <FontAwesomeIcon className="icon" icon={faArrowRight} />
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -176,10 +204,9 @@ const Table = ({ columns, data }) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0
               gotoPage(page)
             }}
-            style={{ width: '100px' }}
           />
-        </span>{' '}
-        <select
+        </PageContent>
+        {/* <select
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value))
@@ -190,8 +217,8 @@ const Table = ({ columns, data }) => {
               Show {pageSize}
             </option>
           ))}
-        </select>
-        <pre>
+        </select> */}
+        {/* <pre>
           <code>
             {JSON.stringify(
               {
@@ -204,8 +231,8 @@ const Table = ({ columns, data }) => {
               2
             )}
           </code>
-        </pre>
-        <pre>
+        </pre> */}
+        {/* <pre>
           <code>
             {JSON.stringify(
               {
@@ -219,9 +246,8 @@ const Table = ({ columns, data }) => {
               2
             )}
           </code>
-        </pre>
-      </div>
-
+        </pre> */}
+      </PageWrapper>
     </>
   );
 }
@@ -265,12 +291,12 @@ const MTable = () => {
 
       },
       {
-        Header: '比對結果',
-        accessor: '比對結果',
+        Header: '比對程序',
+        accessor: '比對程序',
       },
       {
-        Header: '查詢比對結果',
-        accessor: '查詢比對結果',
+        Header: '比對結果查詢',
+        accessor: '比對結果查詢',
         Cell: ({ cell: { value } }) => <DetailLink values={value} />,
       },
     ],

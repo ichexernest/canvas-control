@@ -6,6 +6,7 @@ import { GlobalStyle } from './GlobalStyle';
 import Home from './components/Home';
 import Detail from './components/Detail';
 import Header from './components/Header';
+import CreateNew from './components/CreateNew';
 const Layout = (props) => (
   <>
     <Header />
@@ -18,6 +19,7 @@ const App = () => (
     <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/:fileId' element={<Detail />} />
+        <Route path='/CreateNew' element={<CreateNew />} />
     </Routes>
     </Layout>
     <GlobalStyle />

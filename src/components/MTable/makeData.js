@@ -26,23 +26,23 @@ const range = len => {
 // }
 
 const newFile = () => {
-  const statusChance = Math.random();
+  const statusChance = Math.random()*10;
   const now = (new Date()).getTime();
   const newDiff = parseInt(Math.random() * 1000 * 60 * 60 * 24 * 365, 10);
   const otherDate = new Date(now + newDiff).toLocaleDateString();
   return {
     案號: namor.generate({ words: 1, numbers: 0 }),
     建檔日期:otherDate,
-    說明: namor.generate({ words: 1, numbers: 0 }),
+    說明: statusChance,
     立案人員: namor.generate({ words: 1, numbers: 0 }),
     通知信箱: namor.generate({ words: 1, numbers: 0 }) + '@gmail.com',
     來源文件: Math.floor(Math.random() * 100),
     比對文件: Math.floor(Math.random() * 100),
-    比對結果:
-      statusChance > 0.9
-        ? '通過'
-        : '不通過',
-    查詢比對結果: namor.generate({ words: 1, numbers: 0 }),
+    比對程序:
+      statusChance > 5
+        ? '已完成比對'
+        : '尚未比對',
+    比對結果查詢: namor.generate({ words: 1, numbers: 0 }),
   }
 }
 

@@ -13,6 +13,7 @@ border-bottom: 1px solid var(--lightGrey);
 `;
 export const Logo = styled.button`
 background-color: var(--white);
+color: var(--primary);
 border: 0;
 font-weight: bold;
 padding: 5px 15px;

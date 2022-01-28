@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { React, useEffect, useState } from "react";
-//import Sidebar from "./Sidebar";
-import SearchBar from "./SearchBar";
-import MainTable from "./MainTable";
 import MTable from "./MTable";
+import makeData from './MTable/makeData.js'
+import SearchBar from "./SearchBar";
+import { Link } from "react-router-dom";
 const Home = () => {
     const Wrapper = styled.div`
         max-height: 92vh;
@@ -11,34 +11,49 @@ const Home = () => {
         width: 100vw;
         overflow-y:auto;
     `;
-    const Button = styled.button`
-        background-color: rgb(34, 20, 95);
-        border: 1px solid rgb(124, 110, 185);
-        color: white;
-        padding: 5px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        border-radius: 5px;
+    const ControlWrapper = styled.div`
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    padding: 0 12px;
+`;
+    const NewBtn = styled.button`
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    color: var(--primary);
+    padding: 5px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: var(--fontBig);
+    margin: 15px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 50px;
+    :hover{
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+    [disabled=disabled], :disabled {
+        background-color: var(--btnDisabledColor);
         :hover{
-            background-color: var(--btnActionColor);
-        }
-        [disabled=disabled], :disabled {
             background-color: var(--btnDisabledColor);
-            :hover{
-                background-color: var(--btnDisabledColor);
-                cursor:no-drop;
-            }
+            cursor:no-drop;
         }
-    `;
+    }
+`;
+    const data = makeData(1000);
+
     return (
         <Wrapper>
-            <Button>+ 立案</Button>
-                <MTable />
+            <ControlWrapper>
+                <Link to={`/CreateNew`}>
+                    <NewBtn>+ 立案</NewBtn>
+                </Link>
+                <SearchBar />
+            </ControlWrapper>
+            <MTable data={data} />
         </Wrapper>
     );
 }

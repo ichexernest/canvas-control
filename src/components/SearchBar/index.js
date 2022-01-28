@@ -1,46 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
 //import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faFilter} from '@fortawesome/free-solid-svg-icons'
-//Image
-//import searchIcon from '../../images/search-icon.svg';
+import { faCalendar} from '@fortawesome/free-solid-svg-icons'
 //Styles
 import { Wrapper, Content, Button } from "../SearchBar/SearchBar.styles";
 
-const SearchBar = ({ setSearchTerm }) => {
-    const [state, setState] = useState('');
-    const initial = useRef(true);
+const SearchBar = () => {
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const handleClickEvent = ()=>{
+        alert(`search date range ${startDate} to ${endDate}.`);
+        };
 
-    //skip init render: useRef
-    useEffect(() => {
-        if (initial.current) {
-            initial.current = false;
-            return;
-        }
-        const timer = setTimeout(() => {
-            //setSearchTerm(state);
-        }, 500)
-
-        //     return ()=>clearTimeout(timer)
-        // },[setSearchTerm, state])
-        return () => clearTimeout(timer)
-    }, [state])
     return (
         <Wrapper>
-            <Content>
-                <FontAwesomeIcon className="icon" icon={faSearch} />
-                <input
-                    type='text'
-                    placeholder='Search...'
-                    onChange={event => setState(event.currentTarget.value)}
-                    value={state}
-                />
-                <FontAwesomeIcon className="icon" icon={faSearch} />
-            </Content>
-            <Button>
-            <FontAwesomeIcon className="icon" icon={faFilter} />
-            </Button>
-        </Wrapper>
+        <Content>
+            <input
+                type='date'
+                placeholder={`Start Date`}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+            />
+            <FontAwesomeIcon className="icon" icon={faCalendar} />
+        </Content>
+        至
+        <Content>
+            <FontAwesomeIcon className="icon" icon={faCalendar} />
+            <input
+                type='date'
+                placeholder={`End Date`}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+            />
+        </Content>
+        <Button onClick={handleClickEvent}>搜尋</Button>
+    </Wrapper>
     )
 }
 

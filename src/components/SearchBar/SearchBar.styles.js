@@ -1,40 +1,48 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-background-color: var(--lightGrey);
 display:flex;
 align-items: center;
 height: 50px;
 padding: 0 12px;
 `;
-
 export const Content = styled.div`
 position: relative;
 max-width: var(--maxWidth);
-width: 100%;
-height: 30px;
-margin: 0 auto;
-border-radius: 40px;
+height: 32px;
+width: 300px;
+margin: 0 5px;
+border-radius: 8px;
 border:1px solid var(--medGrey);
 background-color: var(--white);
 color: var(--darkGrey);
 .icon{
     position: absolute;
-    left: 15px;
-    top:6px;
-    width: 30px;
-    color: var(--medGrey);
+    right: 14px;
+    background-color: var(--white);
+    border-radius:50px;
+    top:2px;
+    width: 25px;
+    height:25px;
+    padding:5px;
+    color: var(--primary);
+    z-index:100;
+    pointer-events: none;
+    :hover{
+        background-color: var(--primary);
+        color: var(--primary);
+    }
 }
 input{
     font-size: var(--fontSmall);
     position: absolute;
-    left: 15px;
+    left: 0px;
     margin: 6px 0;
-    padding: 0 0 0 30px;
+    padding: 0 0 0 20px;
     border: 0;
     width: 95%;
     background: transparent;
-    height: 16px;
+    height: 20px;
     color: var(--darkGrey);
     :focus{
     outline:none;
