@@ -1,16 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 //import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendar} from '@fortawesome/free-solid-svg-icons'
+import { faCalendar,faSync} from '@fortawesome/free-solid-svg-icons'
 //Styles
 import { Wrapper, Content, Button } from "../SearchBar/SearchBar.styles";
 
-const SearchBar = () => {
+const SearchBar = ({setSearchTermS,setSearchTermE}) => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const handleClickEvent = ()=>{
-        alert(`search date range ${startDate} to ${endDate}.`);
+        if(startDate > endDate || startDate === endDate){
+            alert(`wrong range!!!!try again!!!!${startDate} to ${endDate}`); 
+            return; 
+        }
+        console.log(`search date range ${startDate} to ${endDate}.`);
+            setSearchTermS(startDate);
+            setSearchTermE(endDate);
         };
+        const handleRefreshEvent = ()=>{
+                setSearchTermS('');
+                setSearchTermE('');
+            };
+            //skip init render: useRef
+    // useEffect(()=>{
+    //     handleClickEvent();
+    // },[setSearchTermS, setSearchTermE])
+
 
     return (
         <Wrapper>
@@ -34,6 +49,7 @@ const SearchBar = () => {
             />
         </Content>
         <Button onClick={handleClickEvent}>搜尋</Button>
+        <Button onClick={handleRefreshEvent}><FontAwesomeIcon className="icon" icon={faSync} /></Button>
     </Wrapper>
     )
 }

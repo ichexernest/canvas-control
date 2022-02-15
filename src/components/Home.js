@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { React, useEffect, useState } from "react";
 import MTable from "./MTable";
-import makeData from './MTable/makeData.js'
 import SearchBar from "./SearchBar";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import { Link } from "react-router-dom";
 const Home = () => {
     const Wrapper = styled.div`
@@ -16,6 +17,14 @@ const Home = () => {
     justify-content:space-between;
     align-items: center;
     padding: 0 12px;
+`;
+const Loading = styled.div`
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items: center;
+color:var(--primary);
 `;
     const NewBtn = styled.button`
     background-color: var(--white);
@@ -43,7 +52,40 @@ const Home = () => {
         }
     }
 `;
-    const data = makeData(1000);
+    const [searchTermS, setSearchTermS] = useState('');
+    const [searchTermE, setSearchTermE] = useState('');
+    const [data, setData] = useState(null);
+    //const data = makeData(1000);
+
+    useEffect(() => {
+        fetchCase(searchTermS, searchTermE);
+    }, [searchTermS, searchTermE])
+    
+    const fetchCase = (searchTermS, searchTermE) => {
+        let szSCreateDTime = searchTermS.replaceAll("-", "");
+        let szECreateDTime = searchTermE.replaceAll("-", "");
+        console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
+        fetch(
+            'http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx/FindCase',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'p_szSCrateDTime': szSCreateDTime,
+                    'p_szECrateDTime': szECreateDTime
+                })
+            }).then((response) => response.json())
+            .then((data) => {
+                // response in data
+                console.log(data.d);
+                setData(JSON.parse(data.d));
+            }).catch((error) => {
+                //handle your error
+            });
+    };
 
     return (
         <Wrapper>
@@ -51,9 +93,10 @@ const Home = () => {
                 <Link to={`/CreateNew`}>
                     <NewBtn>+ 立案</NewBtn>
                 </Link>
-                <SearchBar />
+                <SearchBar setSearchTermS={setSearchTermS} setSearchTermE={setSearchTermE} />
             </ControlWrapper>
-            <MTable data={data} />
+            {data !== null ?
+            <MTable data={data} />:<Loading><FontAwesomeIcon className="icon" icon={faSpinner}  size="4x"  spin /></Loading>}
         </Wrapper>
     );
 }

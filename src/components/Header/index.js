@@ -1,4 +1,4 @@
-import { React, useEffect, useRef } from "react";
+import { React } from "react";
 import { Wrapper,Logo } from './Header.styles';
 import { Link  } from "react-router-dom";
 const Header = () => {

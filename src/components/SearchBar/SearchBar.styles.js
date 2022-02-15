@@ -54,6 +54,7 @@ background-color: rgb(34, 20, 95);
 border: 1px solid rgb(124, 110, 185);
 color: white;
 padding: 5px 15px;
+height:34px;
 text-align: center;
 text-decoration: none;
 display: inline-block;

@@ -1,9 +1,9 @@
 import { React, useState, useMemo} from 'react'
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination, useRowSelect } from 'react-table'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce, usePagination } from 'react-table'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch,faAngleRight,faAngleLeft,faAngleDoubleRight,faAngleDoubleLeft,faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Wrapper, SearchWrapper, GlobalContent,PageContent,PageWrapper, Button } from './MTable.styles'
-import makeData from './makeData'
+//import makeData from './makeData'
 import { Link } from "react-router-dom";
 
 const SourcePath = ({ values }) => {
@@ -11,7 +11,7 @@ const SourcePath = ({ values }) => {
   return (
     <>
       {(
-        <Button key={values} className="badge">
+        <Button key={values} className="badge" onClick={()=>console.log("click "+values)}>
           download
         </Button>
       )
@@ -19,13 +19,15 @@ const SourcePath = ({ values }) => {
     </>
   );
 };
-const DetailLink = ({ values }) => {
+const DetailLink = ({ caseNo, createDTime}) => {
   // Loop through the array and create a badge-like component instead of a comma-separated string
   return (
     <>
       {(
-        <Link to={`/${values}`}>
-          go
+        <Link to={`/${caseNo}/${createDTime}`}>
+        <Button>
+          go        <FontAwesomeIcon className="icon" icon={faArrowRight} />
+        </Button>
         </Link>
 
       )
@@ -33,25 +35,6 @@ const DetailLink = ({ values }) => {
     </>
   );
 };
-// const IndeterminateCheckbox = forwardRef(
-//   ({ indeterminate, ...rest }, ref) => {
-//     const defaultRef = useRef()
-//     const resolvedRef = ref || defaultRef
-
-//     useEffect(() => {
-//       resolvedRef.current.indeterminate = indeterminate
-//     }, [resolvedRef, indeterminate])
-
-//     return (
-//       <>
-//         <input type="checkbox" ref={resolvedRef} {...rest} />
-//       </>
-//     )
-//   }
-// )
-// This is a custom UI for our 'between' or number range
-// filter. It uses two number boxes and filters rows to
-// ones that have values between the two
 const GlobalFilter = ({
   preGlobalFilteredRows,
   globalFilter,
@@ -84,7 +67,7 @@ const Table = ({ columns, data }) => {
     getTableProps, // table props from react-table
     getTableBodyProps, // table body props from react-table
     headerGroups, // headerGroups, if your table has groupings
-    rows, // rows for the table based on the data passed
+    //rows, // rows for the table based on the data passed
     prepareRow,
     page,// Prepare the row (this function needs to be called for each row before getting the row props)
     canPreviousPage,
@@ -94,12 +77,9 @@ const Table = ({ columns, data }) => {
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    selectedFlatRows,
-    setFilter,
     preGlobalFilteredRows,
     setGlobalFilter,
-    state: { pageIndex, pageSize, selectedRowIds, globalFilter },
+    state: { pageIndex, globalFilter },
   } = useTable({
     columns,
     data
@@ -107,42 +87,7 @@ const Table = ({ columns, data }) => {
     useFilters,
     useGlobalFilter,
     usePagination,
-    // useRowSelect,
-    // hooks => {
-    //   hooks.visibleColumns.push(columns => [
-    //     //Let's make a column for selection
-    //     {
-    //       id: 'selection',
-    //       // The header can use the table's getToggleAllRowsSelectedProps method
-    //       // to render a checkbox
-    //       Header: ({ getToggleAllPageRowsSelectedProps }) => (
-    //         <div>
-    //           <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-    //         </div>
-    //       ),
-    //       // The cell can use the individual row's getToggleRowSelectedProps method
-    //       // to the render a checkbox
-    //       Cell: ({ row }) => (
-    //         <div>
-    //           <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-    //         </div>
-    //       ),
-    //     },
-    //     ...columns,
-    //   ])
-    // }
   );
-
-  const [filterInput, setFilterInput] = useState("");
-
-  // Update the state when input changes
-  const handleFilterChange = e => {
-    const value = e.target.value || undefined;
-    setFilter("說明", value); // Update the show.name filter. Now our table will filter and show only the rows which have a matching value
-    setFilterInput(value);
-  };
-
-
   /* 
     Render the UI for your table
     - react-table doesn't have UI, it's headless. We just need to put the react-table props from the Hooks, and it will do its magic automatically
@@ -206,107 +151,63 @@ const Table = ({ columns, data }) => {
             }}
           />
         </PageContent>
-        {/* <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select> */}
-        {/* <pre>
-          <code>
-            {JSON.stringify(
-              {
-                selectedRowIds: selectedRowIds,
-                'selectedFlatRows[].original': selectedFlatRows.map(
-                  d => d.original
-                ),
-              },
-              null,
-              2
-            )}
-          </code>
-        </pre> */}
-        {/* <pre>
-          <code>
-            {JSON.stringify(
-              {
-                pageIndex,
-                pageSize,
-                pageCount,
-                canNextPage,
-                canPreviousPage,
-              },
-              null,
-              2
-            )}
-          </code>
-        </pre> */}
       </PageWrapper>
     </>
   );
 }
 
-const MTable = () => {
+const MTable = ({ data }) => {
   const columns = useMemo(
     () => [
       {
         Header: '案號',
-        accessor: '案號',
+        accessor: 'Vhno',
       },
       {
         Header: '建檔日期',
-        accessor: '建檔日期',
-      },
-      {
-        Header: '說明',
-        accessor: '說明',
-
+        accessor: 'CreateTime',
       },
       {
         Header: '立案人員',
-        accessor: '立案人員',
-
+        accessor: 'CreateEmp',
+      },
+      {
+        Header: '公司別',
+        accessor: 'Co',
       },
       {
         Header: '通知信箱',
-        accessor: '通知信箱',
+        accessor: 'Email',
 
       },
-      {
-        Header: '來源文件',
-        accessor: '來源文件',
-        Cell: ({ cell: { value } }) => <SourcePath values={value} />,
+      // {
+      //   Header: '來源文件',
+      //   accessor: 'SrcFileName',
+      //   Cell: ({ cell }) => <SourcePath values={cell.row.values.SrcFileName} />,
 
-      },
-      {
-        Header: '比對文件',
-        accessor: '比對文件',
-        Cell: ({ cell: { value } }) => <SourcePath values={value} />,
+      // },
+      // {
+      //   Header: '比對文件',
+      //   accessor: 'RefFileName',
+      //   Cell: ({ cell}) => <SourcePath values={cell.row.values.RefFileName} />,
 
-      },
+      // },
       {
         Header: '比對程序',
-        accessor: '比對程序',
+        accessor: 'Result',
       },
       {
         Header: '比對結果查詢',
-        accessor: '比對結果查詢',
-        Cell: ({ cell: { value } }) => <DetailLink values={value} />,
+        Cell: ({ cell }) => <DetailLink caseNo={cell.row.values.Vhno} createDTime={cell.row.values.CreateTime.slice(0, 8)}  />,
       },
     ],
     []
   )
 
-  const data = useMemo(() => makeData(1000), [])
+  const mainData = useMemo(() => data, [])
   return (
     <Wrapper>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={mainData} />
     </Wrapper>
   )
 }

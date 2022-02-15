@@ -1,4 +1,4 @@
-import { React, useEffect, useRef } from "react";
+import { React, useEffect, useRef,useState } from "react";
 import { Wrapper, Box, Canvas, BoxText } from './DetailCanvas.styles';
 //import testImg from '../../images/caseA0827_save_ref_1.jpg';
 import { PanZoom } from 'react-easy-panzoom'
@@ -6,49 +6,115 @@ import { PanZoom } from 'react-easy-panzoom'
 const DetailCanvas = ({srcFile,refFile, target}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
-
+    const [loaded, setLoaded] = useState(false);
     useEffect(() => {
 
-        //source canvas area
-        const canvasSrcObj = canvasSrc.current;
-        const canvasSrcCtx = canvasSrcObj.getContext('2d');
-        const imgSrc = new Image();
-        imgSrc.src = srcFile;
-        imgSrc.onload = () => {
-            canvasSrcObj.width = target.width;
-            canvasSrcObj.height = target.height;
-            canvasSrcCtx.drawImage(
-                imgSrc, 
-                target.x, 
-                target.y, 
-                target.width, 
-                target.height, 
-                0, 0, 
-                target.width, 
-                target.height
-                );
-        }
+   
+            drawCanvaDetail();
 
-        //reference canvas area
-        const canvasRefObj = canvasRef.current;
-        const canvasRefCtx = canvasRefObj.getContext('2d');
-        const imgRef = new Image();
-        imgRef.src = refFile;
-        imgRef.onload = () => {
-            canvasRefObj.width = target.width;
-            canvasRefObj.height = target.height;
-            canvasRefCtx.drawImage(
-                imgRef, 
-                target.x, 
-                target.y, 
-                target.width, 
-                target.height, 
-                0, 0, 
-                target.width, 
-                target.height
-                );
-        }
+   
     });
+    // const drawCanvaDetail = ()=>{
+    //     return new Promise((resolve, reject) => {
+    //             //source canvas area
+    //             const canvasSrcObj = canvasSrc.current;
+    //             const canvasSrcCtx = canvasSrcObj.getContext('2d');
+    //             const imgSrc = new Image();
+    //             imgSrc.style = loaded ? {} : { display: 'none' };
+    //             imgSrc.src = srcFile;
+    //             imgSrc.onload = () => {
+    //                 canvasSrcObj.width = target.Width;
+    //                 canvasSrcObj.height = target.Height;
+    //                 canvasSrcCtx.drawImage(
+    //                     imgSrc, 
+    //                     target.X, 
+    //                     target.Y, 
+    //                     target.Width, 
+    //                     target.Height, 
+    //                     0, 0, 
+    //                     target.Width, 
+    //                     target.Height
+    //                     );
+    //                     resolve(imgSrc.height)
+    //                     setLoadCount();
+    //             }
+    //             imgSrc.onerror = reject;
+    //         })
+    // }
+    // const drawCanvaDetail2 = ()=>{
+    //     return new Promise((resolve, reject) => {
+    //             //reference canvas area
+    //             const canvasRefObj = canvasRef.current;
+    //             const canvasRefCtx = canvasRefObj.getContext('2d');
+    //             const imgRef = new Image();
+    //             imgRef.style = loaded ? {} : { display: 'none' };
+    //             imgRef.src = refFile;
+    //             imgRef.onload = () => {
+    //                 canvasRefObj.width = target.Width;
+    //                 canvasRefObj.height = target.Height;
+    //                 canvasRefCtx.drawImage(
+    //                     imgRef, 
+    //                     target.X, 
+    //                     target.Y, 
+    //                     target.Width, 
+    //                     target.Height, 
+    //                     0, 0, 
+    //                     target.Width, 
+    //                     target.Height
+    //                     );
+    //                     resolve(imgRef.height);
+    //                     setLoaded(true);
+    //             }
+    //             imgRef.onerror = reject;
+    //         })
+    // }
+        const drawCanvaDetail = ()=>{
+            let count = 2;
+                //source canvas area
+                const canvasSrcObj = canvasSrc.current;
+                const canvasSrcCtx = canvasSrcObj.getContext('2d');
+                const imgSrc = new Image();
+                imgSrc.style = loaded ? {} : { display: 'none' };
+                imgSrc.src = srcFile;
+                imgSrc.onload = () => {
+                    canvasSrcObj.width = target.Width;
+                    canvasSrcObj.height = target.Height;
+                    canvasSrcCtx.drawImage(
+                        imgSrc, 
+                        target.X, 
+                        target.Y, 
+                        target.Width, 
+                        target.Height, 
+                        0, 0, 
+                        target.Width, 
+                        target.Height
+                        );
+                        count--;
+                }
+
+                //reference canvas area
+                const canvasRefObj = canvasRef.current;
+                const canvasRefCtx = canvasRefObj.getContext('2d');
+                const imgRef = new Image();
+                imgRef.style = loaded ? {} : { display: 'none' };
+                imgRef.src = refFile;
+                imgRef.onload = () => {
+                    canvasRefObj.width = target.Width;
+                    canvasRefObj.height = target.Height;
+                    canvasRefCtx.drawImage(
+                        imgRef, 
+                        target.X, 
+                        target.Y, 
+                        target.Width, 
+                        target.Height, 
+                        0, 0, 
+                        target.Width, 
+                        target.Height
+                        );
+                        count--;
+                }
+                if(count===0) setLoaded(true);
+    }
     return (
         <Wrapper>
             <Box>

@@ -18,7 +18,7 @@ const App = () => (
 <Layout>
     <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/:fileId' element={<Detail />} />
+        <Route path='/:caseNo/:createDTime' element={<Detail />} />
         <Route path='/CreateNew' element={<CreateNew />} />
     </Routes>
     </Layout>
