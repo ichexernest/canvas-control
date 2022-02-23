@@ -16,6 +16,7 @@ export const GlobalStyle = createGlobalStyle`
     --listActionColor:rgb(219, 216, 232);
     --btnActionColor:rgb(126, 109, 199);
     --btnDisabledColor:rgb(163, 159, 179);
+    --tableActionColor:rgba(34, 20, 95, .2);
     --bgMaskColor: #dddddd;
     --bgError: rgb(242, 102, 102);
     --bgSuccess:rgb(0, 196, 10);
@@ -67,6 +68,9 @@ body{
             -o-user-select:none;
             user-select:none;   
             cursor: pointer;
+        }
+        .d-none{
+            background-color: var(--primary);
         }
     }
     li{

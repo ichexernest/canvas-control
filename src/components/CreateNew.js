@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { React, useEffect, useState, useRef } from "react";
-const useForceUpdate = () => useState()[1];
+import { Link } from 'react-router-dom';
 const CreateNew = () => {
     const Wrapper = styled.div`
         max-height: 92vh;
@@ -9,51 +11,31 @@ const CreateNew = () => {
         margin:0 auto;
         display: flex;
         flex-direction: column;
+        
     `;
-    const InputContent = styled.div`
-    position: relative;
-    max-width: var(--maxWidth);
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    border:1px solid var(--medGrey);
+    const InputLabel = styled.span`
+
+    margin:10px 2px 2px;
+
+`;
+    const NewBtn = styled.button`
     background-color: var(--white);
-    color: var(--darkGrey);
-    input{
-        font-size: var(--fontMed);
-        position: absolute;
-        left: 0;
-        margin:8px 0;
-        padding: 0 0 0 10px;
-        border: 0;
-        width: 95%;
-        background: transparent;
-        height: 25px;
-        color: var(--darkGrey);
-        :focus{
-        outline:none;
-        }
-    }
-    :focus-within{
-        border: 2px solid var(--btnActionColor);
-        box-shadow:  0 0 3px var(--listActionColor), 0 0 5px var(--listActionColor);
-    }
-    `;
-    const Button = styled.button`
-    background-color: rgb(34, 20, 95);
-    border: 1px solid rgb(124, 110, 185);
-    color: white;
-    padding: 5px 15px;
+    border: 1px solid var(--white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    color: var(--primary);
+    padding: 5px 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: var(--fontBig);
+    margin: 15px 0px;
+    width:100px;
     transition-duration: 0.4s;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 50px;
     :hover{
-        background-color: var(--btnActionColor);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     }
     [disabled=disabled], :disabled {
         background-color: var(--btnDisabledColor);
@@ -62,103 +44,106 @@ const CreateNew = () => {
             cursor:no-drop;
         }
     }
+`;
+const Title =styled.div`
+font-size: var(--fontBig);
+color: var(--primary);
+margin: auto 10px;
+`;
+    const InputContent = styled.div`
+    position: relative;
+    max-width: var(--maxWidth);
+    height: 32px;
+    width: 100%;
+    margin: 0 5px 10px;
+    border-radius: 8px;
+    border:1px solid var(--medGrey);
+    background-color: var(--white);
+    color: var(--darkGrey);
+    .icon{
+        position: absolute;
+        right: 14px;
+        background-color: var(--white);
+        border-radius:50px;
+        top:2px;
+        width: 25px;
+        height:25px;
+        padding:5px;
+        color: var(--primary);
+        z-index:100;
+        pointer-events: none;
+        :hover{
+            background-color: var(--primary);
+            color: var(--primary);
+        }
+    }
+    input{
+        font-size: var(--fontSmall);
+        position: absolute;
+        left: 0px;
+        margin: 6px 0;
+        padding: 0 0 0 20px;
+        border: 0;
+        width: 95%;
+        background: transparent;
+        height: 20px;
+        color: var(--darkGrey);
+        :focus{
+        outline:none;
+    }
+    }
     `;
-    const fileInput = useRef(null);
-    const forceUpdate = useForceUpdate();
-
-    useEffect(e => {
-        window.addEventListener("keyup", clickFileInput);
-        return () => window.removeEventListener("keyup", clickFileInput);
-    });
-
-    function clickFileInput(e) {
-        if (fileInput.current.nextSibling.contains(document.activeElement)) {
-            // Bind space to trigger clicking of the button when focused
-            if (e.keyCode === 32) {
-                fileInput.current.click();
-            }
-        }
-    }
-
-    function onSubmit(e) {
-        e.preventDefault();
-        const data = new FormData(fileInput.current.files);
-    }
-
-    function fileNames() {
-        const { current } = fileInput;
-
-        if (current && current.files.length > 0) {
-            let messages = [];
-            for (let file of current.files) {
-                messages = messages.concat(<p key={file.name}>{file.name}</p>);
-            }
-            return messages;
-        }
-        return null;
-    }
     return (
-        <Wrapper>
-            <form onSubmit={onSubmit}>
-                <span>
-                    上船來源
-                </span>
-                <Button>
-                    <input
-                        type="file"
-                        ref={fileInput}
-                        // The onChange should trigger updates whenever
-                        // the value changes?
-                        // Try to select a file, then try selecting another one.
-                        onChange={forceUpdate}
-                        style={{ display: "none" }}
-                        component="label"
-                        multiple
-                    />
-                </Button>
-                <span>
-                    上船參考
-                </span>
-                <Button>
-                    新增附件
-                    <input
-                        id="file"
-                        type="file"
-                        ref={fileInput}
-                        // The onChange should trigger updates whenever
-                        // the value changes?
-                        // Try to select a file, then try selecting another one.
-                        onChange={forceUpdate}
-                        component="label"
-                        multiple
-                    />
-                </Button>
-                <span>
-                    說明
-                </span>
-                <InputContent>
-                    <input
-                        type='text'
-                    />
-                </InputContent>
-                <span>
-                    信箱
-                </span>
-                <InputContent>
-                    <input
-                        type='text'
-                    />
-                </InputContent>
-                <label htmlFor="file">
-                    <span tabIndex="0" role="button" aria-controls="filename">
-                        Upload file(s):{" "}
-                    </span>
-                </label>
-                {fileNames()}
-                <br />
-                <Button type="submit">建立</Button>
+        <>
+            <form>
+                <Wrapper>
+                    <div style={{ display: 'flex' }}>
+                        <Link to='/'>
+                            <NewBtn><FontAwesomeIcon className="icon" icon={faArrowLeft} /></NewBtn>
+                        </Link >
+                        <Title>立案新增</Title>
+                    </div>
+                    <InputLabel>來源</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <InputLabel>參考</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <InputLabel>信箱</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <InputLabel>說明</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <InputLabel>上傳人</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <InputLabel>上傳時間</InputLabel>
+                    <InputContent>
+                        <input
+                            type='text'
+                        />
+                    </InputContent>
+                    <NewBtn type="submit">建立</NewBtn>
+
+                </Wrapper>
             </form>
-        </Wrapper>
+        </>
     );
 }
 

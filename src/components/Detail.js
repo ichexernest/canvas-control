@@ -4,6 +4,7 @@ import { React, useEffect, useState } from "react";
 //import Sidebar from "./Sidebar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import ContentArea from "./ContentArea";
 //import API from '../API';
@@ -48,10 +49,14 @@ color:var(--primary);
     const { caseNo,createDTime } = useParams();
     const [activePageId, setActivePageId] = useState(0); //active ocr area
     const [pages, setPages] = useState(null); //main data
+    const navigate = useNavigate();
+
     useEffect(() => {
         fetchPageList();
     }, [])
-
+    const back = ()=>{
+        navigate(-1);
+    }
     const fetchPageList = () => {
         console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime}`);
         fetch(
@@ -69,33 +74,19 @@ color:var(--primary);
             }).then((response) => response.json())
             .then((data) => {
                 // response in data
-                console.log(JSON.parse(data.d));
-                setPages(JSON.parse(data.d));
+                console.log(`data d parsr ::${JSON.parse(data.d).length}::: ${JSON.stringify(data.d)}`);
+                if(JSON.parse(data.d).length==0 ||JSON.parse(data.d) == null){
+                    alert(`no page data`);
+                    back();
+                }else{
+                    setPages(JSON.parse(data.d));
+                }
+                
             }).catch((error) => {
                 //handle your error
+                alert(`fetch failed : ${error}`);
+                back();
             });
-            // const responseData = {
-            //     "fileName": "Case08統一藥品自我檢測驗孕盤_紙盒",
-            //     "pageSize": 3,
-            //     "pages": [
-            //         {
-            //             "page": 1,
-            //             "filePathSets": "https://www.yunchun.com.tw/upload/20191017113153s1agd1.png",
-            //         },
-            //         {
-            //             "page": 2,
-            //             "filePathSets": "https://www.yunchun.com.tw/upload/20191017113153s1agd1.png",
-            //         },
-            //         {
-            //             "page": 3,
-            //             "filePathSets": "https://www.yunchun.com.tw/upload/20191017113153s1agd1.png",
-            //         },
-            //         {
-            //             "page": 4,
-            //             "filePathSets": "https://www.yunchun.com.tw/upload/20191017113153s1agd1.png",
-            //         },
-            //     ]
-            // };
     };
 
     const handleSelectTarget = (i) => {

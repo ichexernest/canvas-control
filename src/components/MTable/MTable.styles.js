@@ -15,7 +15,10 @@ table {
     tr {
         background-color:#e9e9e9;
         &:nth-of-type(odd){
-            background: #ffffff;
+            background: var(--white);
+        }
+        :hover{
+            background: var(--tableActionColor);
         }
         :last-child {
         td {
