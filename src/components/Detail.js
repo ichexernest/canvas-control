@@ -53,6 +53,7 @@ color:var(--primary);
 
     useEffect(() => {
         fetchPageList();
+        
     }, [])
     const back = ()=>{
         navigate(-1);
@@ -74,11 +75,24 @@ color:var(--primary);
             }).then((response) => response.json())
             .then((data) => {
                 // response in data
-                console.log(`data d parsr ::${JSON.parse(data.d).length}::: ${JSON.stringify(data.d)}`);
+                //console.log(`data d parsr ::${JSON.parse(data.d).length}::: ${JSON.stringify(data.d)}`);
                 if(JSON.parse(data.d).length==0 ||JSON.parse(data.d) == null){
                     alert(`no page data`);
                     back();
-                }else{
+                }else{ 
+                    // var EditSet={"EditSet":[
+                    //     {
+                    //         "BoxIndex":1,
+                    //         "Page":0,
+                    //         "Pass":true
+                    //     },                    {
+                    //         "BoxIndex":2,
+                    //         "Page":0,
+                    //         "Pass":true
+                    //     }
+                    // ]}
+                    // data.d.push(EditSet);
+                    console.log(data.d)
                     setPages(JSON.parse(data.d));
                 }
                 

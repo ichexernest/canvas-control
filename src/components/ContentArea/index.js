@@ -5,12 +5,13 @@ import { Wrapper, ActionGroup, ControlBar, ContentWrapper, DetailWrapper, Conten
 import ContentCanvas from '../ContentCanvas';
 import DetailCanvas from '../DetailCanvas';
 
-const ContentArea = ({ content,fileName, pageIndex }) => {
+const ContentArea = ({ content, fileName }) => {
     const [activeTargetId, setActiveTargetId] = useState(0); //active ocr area
     const [activePathId, setActivePathId] = useState(0); //active file display Display
-    const [isAlign, setIsAlign] = useState(true); //active file display Display
+    const [isAlign, setIsAlign] = useState(true); //Only align pattern show detection block
     const [disabled, setDisabled] = useState(true); //check button disabled
-    const [hide, setHide] = useState(false); //check button disabled
+    const [hide, setHide] = useState(false); 
+    
 
     const handleSelectTarget = (i) => {
         setActiveTargetId(i);
@@ -19,21 +20,17 @@ const ContentArea = ({ content,fileName, pageIndex }) => {
     }
     const handleCurrFile = (i) => {
         setActivePathId(i);
-        i!==0?setIsAlign(false):setIsAlign(true);
+        i !== 0 ? setIsAlign(false) : setIsAlign(true);
     }
     const handleCheck = (i) => {
     }
     const changeList = () => {
-        if(!hide){
-            setHide(true);
-            console.log("dddswjdiwhiphpih")
-        } 
-
+        setHide(!hide);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(`here's content ${JSON.stringify(content)}`)
-    },[])
+    }, [])
 
 
     return (
@@ -42,7 +39,7 @@ const ContentArea = ({ content,fileName, pageIndex }) => {
                 <h3>{content !== null && `${fileName} page:${content.Page}`}</h3>
                 <ActionGroup>
                     {content !== null && content.FilePathSets.map((item, index) => {
-                        const btnTextIndex = ["align overlay","original overlay","source", "reference", "source(align)"];
+                        const btnTextIndex = ["align overlay", "original overlay", "source", "reference", "source(align)"];
                         let btnClasses = classNames({
                             'active': (activePathId === index) ? true : false,
                         });
@@ -54,7 +51,7 @@ const ContentArea = ({ content,fileName, pageIndex }) => {
             </ControlBar>
             <ContentWrapper>
                 <ContentList>
-                    <button onClick={()=>changeList()}>change list</button>
+                    <button onClick={() => changeList()}>show all/issue only </button>
                     <ul>
                         {content !== null && content.Sets.map((item, index) => {
 
@@ -62,7 +59,7 @@ const ContentArea = ({ content,fileName, pageIndex }) => {
                                 'success': (item.OcrSSIM < 1 && item.Pass) ? true : false,
                                 'error': (item.OcrSSIM < 1 && !item.Pass) ? true : false,
                                 'active': (activeTargetId === index) ? true : false,
-                                'd-none': (hide) ? true : false,
+                                'd-none': (item.OcrSSIM == 1 || item.Pass) ? hide : false,
                             });
                             return (
                                 <li key={index} className={liClasses} onClick={() => handleSelectTarget(index)} title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.SrcText}:{item.OcrSSIM}</li>
@@ -71,7 +68,7 @@ const ContentArea = ({ content,fileName, pageIndex }) => {
                     </ul>
                 </ContentList>
                 {content !== null ?
-                    <ContentCanvas currFile={content.FilePathSets[activePathId]} target={content.Sets[activeTargetId].Rect} isAlign={isAlign}/>
+                    <ContentCanvas currFile={content.FilePathSets[activePathId]} target={content.Sets[activeTargetId].Rect} isAlign={isAlign} />
                     :
                     <ContentCanvas currFile={""} target={{}} />
                 }

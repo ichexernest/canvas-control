@@ -70,7 +70,7 @@ body{
             cursor: pointer;
         }
         .d-none{
-            background-color: var(--primary);
+            display: none;
         }
     }
     li{

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { React, useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from 'react-router-dom';
 const CreateNew = () => {
     const Wrapper = styled.div`
@@ -13,7 +14,7 @@ const CreateNew = () => {
         flex-direction: column;
         
     `;
-    const InputLabel = styled.span`
+    const InputLabel = styled.label`
 
     margin:10px 2px 2px;
 
@@ -45,7 +46,7 @@ const CreateNew = () => {
         }
     }
 `;
-const Title =styled.div`
+    const Title = styled.div`
 font-size: var(--fontBig);
 color: var(--primary);
 margin: auto 10px;
@@ -60,23 +61,6 @@ margin: auto 10px;
     border:1px solid var(--medGrey);
     background-color: var(--white);
     color: var(--darkGrey);
-    .icon{
-        position: absolute;
-        right: 14px;
-        background-color: var(--white);
-        border-radius:50px;
-        top:2px;
-        width: 25px;
-        height:25px;
-        padding:5px;
-        color: var(--primary);
-        z-index:100;
-        pointer-events: none;
-        :hover{
-            background-color: var(--primary);
-            color: var(--primary);
-        }
-    }
     input{
         font-size: var(--fontSmall);
         position: absolute;
@@ -93,56 +77,35 @@ margin: auto 10px;
     }
     }
     `;
+    const { register, handleSubmit } = useForm();
+    const onSubmit = (data) => {
+        alert(JSON.stringify(data));
+    };
     return (
         <>
-            <form>
-                <Wrapper>
-                    <div style={{ display: 'flex' }}>
-                        <Link to='/'>
-                            <NewBtn><FontAwesomeIcon className="icon" icon={faArrowLeft} /></NewBtn>
-                        </Link >
-                        <Title>立案新增</Title>
-                    </div>
+            <Wrapper>
+                <div style={{ display: 'flex' }}>
+                    <Link to='/'>
+                        <NewBtn><FontAwesomeIcon className="icon" icon={faArrowLeft} /></NewBtn>
+                    </Link >
+                    <Title>立案新增</Title>
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <InputLabel>來源</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("source")} placeholder="source" type="file" /></InputContent>
                     <InputLabel>參考</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("reference")} placeholder="reference" type="file" /></InputContent>
                     <InputLabel>信箱</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("mail")} placeholder="mail" /></InputContent>
                     <InputLabel>說明</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("description")} placeholder="description" /></InputContent>
                     <InputLabel>上傳人</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("uploader")} placeholder="uploader" /></InputContent>
                     <InputLabel>上傳時間</InputLabel>
-                    <InputContent>
-                        <input
-                            type='text'
-                        />
-                    </InputContent>
+                    <InputContent><input {...register("uploadTime")} placeholder="uploadTime" /></InputContent>
                     <NewBtn type="submit">建立</NewBtn>
-
-                </Wrapper>
-            </form>
+                </form>
+            </Wrapper>
         </>
     );
 }
