@@ -17,15 +17,15 @@ const Home = () => {
     justify-content:space-between;
     align-items: center;
     padding: 0 12px;
-`;
-const Loading = styled.div`
+    `;
+    const Loading = styled.div`
 width:100%;
 height:100%;
 display:flex;
 justify-content:center;
 align-items: center;
 color:var(--primary);
-`;
+    `;
     const NewBtn = styled.button`
     background-color: var(--white);
     border: 1px solid var(--white);
@@ -51,19 +51,38 @@ color:var(--primary);
             cursor:no-drop;
         }
     }
-`;
-    const [searchTermS, setSearchTermS] = useState('');
-    const [searchTermE, setSearchTermE] = useState('');
+    `;
+    const tranDateToString = (begin) => {
+        let date = new Date();
+
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year;
+
+        if(begin)
+            year = date.getFullYear() - 1;
+        else
+            year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        return  year + "-" + month + "-" + day;
+    };
+    const initEDate =tranDateToString(false);
+    const initSDate =tranDateToString(true);
     const [data, setData] = useState(null);
-    //const data = makeData(1000);
+    const [sDate, setSDate] = useState(initSDate);
+    const [eDate, setEDate] = useState(initEDate);
 
     useEffect(() => {
-        fetchCase(searchTermS, searchTermE);
-    }, [searchTermS, searchTermE])
-    
-    const fetchCase = (searchTermS, searchTermE) => {
-        let szSCreateDTime = searchTermS.replaceAll("-", "");
-        let szECreateDTime = searchTermE.replaceAll("-", "");
+        fetchCase(sDate,eDate);
+    }, [])
+    const  fetchCase = (searchTermS, searchTermE) => {
+        let szSCreateDTime='',szECreateDTime='';
+        if(searchTermS && searchTermE){
+            szSCreateDTime = searchTermS.replaceAll("-", "");
+            szECreateDTime = searchTermE.replaceAll("-", "");
+        }
         console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
         fetch(
             'http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx/FindCase',
@@ -80,8 +99,11 @@ color:var(--primary);
             }).then((response) => response.json())
             .then((data) => {
                 // response in data
-                console.log(data.d);
+                //console.log(data.d);
+                console.log("GET DATA LOLLLLLLLLLLLL");
                 setData(JSON.parse(data.d));
+                setSDate(searchTermS);
+                setEDate(searchTermE);
             }).catch((error) => {
                 //handle your error
             });
@@ -93,7 +115,7 @@ color:var(--primary);
                 <Link to={`/CreateNew`}>
                     <NewBtn>+ 立案</NewBtn>
                 </Link>
-                <SearchBar setSearchTermS={setSearchTermS} setSearchTermE={setSearchTermE} />
+                <SearchBar fetchCase={fetchCase} sDate={sDate} eDate={eDate} initSDate={initSDate} initEDate={initEDate}/>
             </ControlWrapper>
             {data !== null ?
             <MTable data={data} />:<Loading><FontAwesomeIcon className="icon" icon={faSpinner}  size="4x"  spin /></Loading>}

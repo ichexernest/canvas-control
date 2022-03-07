@@ -53,7 +53,6 @@ color:var(--primary);
 
     useEffect(() => {
         fetchPageList();
-        
     }, [])
     const back = ()=>{
         navigate(-1);
@@ -76,7 +75,7 @@ color:var(--primary);
             .then((data) => {
                 // response in data
                 //console.log(`data d parsr ::${JSON.parse(data.d).length}::: ${JSON.stringify(data.d)}`);
-                if(JSON.parse(data.d).length==0 ||JSON.parse(data.d) == null){
+                if(JSON.parse(data.d).length===0 ||JSON.parse(data.d) === null){
                     alert(`no page data`);
                     back();
                 }else{ 

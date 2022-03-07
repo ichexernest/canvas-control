@@ -6,19 +6,19 @@ import { Wrapper, SearchWrapper, GlobalContent,PageContent,PageWrapper, Button }
 //import makeData from './makeData'
 import { Link } from "react-router-dom";
 
-const SourcePath = ({ values }) => {
-  // Loop through the array and create a badge-like component instead of a comma-separated string
-  return (
-    <>
-      {(
-        <Button key={values} className="badge" onClick={()=>console.log("click "+values)}>
-          download
-        </Button>
-      )
-      }
-    </>
-  );
-};
+// const SourcePath = ({ values }) => {
+//   // Loop through the array and create a badge-like component instead of a comma-separated string
+//   return (
+//     <>
+//       {(
+//         <Button key={values} className="badge" onClick={()=>console.log("click "+values)}>
+//           download
+//         </Button>
+//       )
+//       }
+//     </>
+//   );
+// };
 const DetailLink = ({ caseNo, createDTime}) => {
   // Loop through the array and create a badge-like component instead of a comma-separated string
   return (

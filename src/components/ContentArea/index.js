@@ -23,6 +23,7 @@ const ContentArea = ({ content, fileName }) => {
         i !== 0 ? setIsAlign(false) : setIsAlign(true);
     }
     const handleCheck = (i) => {
+        console.log(i);
     }
     const changeList = () => {
         setHide(!hide);
@@ -59,10 +60,10 @@ const ContentArea = ({ content, fileName }) => {
                                 'success': (item.OcrSSIM < 1 && item.Pass) ? true : false,
                                 'error': (item.OcrSSIM < 1 && !item.Pass) ? true : false,
                                 'active': (activeTargetId === index) ? true : false,
-                                'd-none': (item.OcrSSIM == 1 || item.Pass) ? hide : false,
+                                'd-none': (item.OcrSSIM === 1) ? hide : false,
                             });
                             return (
-                                <li key={index} className={liClasses} onClick={() => handleSelectTarget(index)} title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.SrcText}:{item.OcrSSIM}</li>
+                                <li key={item.BoxIndex} className={liClasses} onClick={() => handleSelectTarget(index)} title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.BoxIndex}. {item.SrcText}:{item.OcrSSIM}</li>
                             )
                         })}
                     </ul>
