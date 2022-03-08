@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import React,{ useEffect, useState,useContext } from "react";
 import classNames from 'classnames';
 import { Wrapper, ActionGroup, ControlBar, ContentWrapper, DetailWrapper, ContentList, Button, DetailInfo, InfoContent, CheckContent } from './ContentArea.styles';
 
@@ -37,9 +37,9 @@ const ContentArea = ({ content, fileName }) => {
     return (
         <Wrapper>
             <ControlBar>
-                <h3>{content !== null && `${fileName} page:${content.Page}`}</h3>
+                <h3>{content && `${fileName} page:${content.Page}`}</h3>
                 <ActionGroup>
-                    {content !== null && content.FilePathSets.map((item, index) => {
+                    {content && content.FilePathSets.map((item, index) => {
                         const btnTextIndex = ["align overlay", "original overlay", "source", "reference", "source(align)"];
                         let btnClasses = classNames({
                             'active': (activePathId === index) ? true : false,
@@ -54,7 +54,7 @@ const ContentArea = ({ content, fileName }) => {
                 <ContentList>
                     <button onClick={() => changeList()}>show all/issue only </button>
                     <ul>
-                        {content !== null && content.Sets.map((item, index) => {
+                        {content && content.Sets.map((item, index) => {
 
                             let liClasses = classNames({
                                 'success': (item.OcrSSIM < 1 && item.Pass) ? true : false,
@@ -68,7 +68,7 @@ const ContentArea = ({ content, fileName }) => {
                         })}
                     </ul>
                 </ContentList>
-                {content !== null ?
+                {content ?
                     <ContentCanvas currFile={content.FilePathSets[activePathId]} target={content.Sets[activeTargetId].Rect} isAlign={isAlign} />
                     :
                     <ContentCanvas currFile={""} target={{}} />
@@ -76,7 +76,7 @@ const ContentArea = ({ content, fileName }) => {
             </ContentWrapper>
             <DetailWrapper>
                 <DetailInfo>
-                    {content !== null &&
+                    {content &&
                         <InfoContent>
                             <strong>src:</strong>{content.Sets[activeTargetId].SrcText}<br />
                             <strong>ref:</strong>{content.Sets[activeTargetId].RefText}<br />
@@ -89,7 +89,7 @@ const ContentArea = ({ content, fileName }) => {
                         <Button disabled={disabled} onClick={() => handleCheck(content.Sets[activeTargetId].BoxIndex)}>manual checked</Button>
                     </CheckContent>
                 </DetailInfo>
-                {content !== null ?
+                {content ?
                     <DetailCanvas srcFile={content.FilePathSets[4]} refFile={content.FilePathSets[3]} target={content.Sets[activeTargetId].Rect} />
                     :
                     <DetailCanvas srcFile={""} refFile={""} target={{}} />

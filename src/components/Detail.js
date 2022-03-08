@@ -8,37 +8,36 @@ import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import ContentArea from "./ContentArea";
 //import API from '../API';
-const Detail = () => {
-    const Wrapper = styled.div`
-        max-height: 92vh;
-        height: 92vh;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex: 1;
-        justify-content: stretch;
-    `;
-    const Sidebar = styled.div`
-        background: var(--bgColor);
-        position: relative;
-        display: flex;
-        overflow-y: auto;
-        flex-direction: column;
-        flex: 1;
-        border-right: 1px solid var(--lightGrey);
-        img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-            }
-        li{
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-        }
-    `;
-    const Loading = styled.div`
+const Wrapper = styled.div`
+max-height: 92vh;
+height: 92vh;
+width: 100%;
+display: flex;
+flex-direction: row;
+flex: 1;
+justify-content: stretch;
+`;
+const Sidebar = styled.div`
+background: var(--bgColor);
+position: relative;
+display: flex;
+overflow-y: auto;
+flex-direction: column;
+flex: 1;
+border-right: 1px solid var(--lightGrey);
+img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    }
+li{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+`;
+const Loading = styled.div`
 width:100%;
 height:100%;
 display:flex;
@@ -46,6 +45,7 @@ justify-content:center;
 align-items: center;
 color:var(--primary);
 `;
+const Detail = () => {
     const { caseNo,createDTime } = useParams();
     const [activePageId, setActivePageId] = useState(0); //active ocr area
     const [pages, setPages] = useState(null); //main data
@@ -79,18 +79,7 @@ color:var(--primary);
                     alert(`no page data`);
                     back();
                 }else{ 
-                    // var EditSet={"EditSet":[
-                    //     {
-                    //         "BoxIndex":1,
-                    //         "Page":0,
-                    //         "Pass":true
-                    //     },                    {
-                    //         "BoxIndex":2,
-                    //         "Page":0,
-                    //         "Pass":true
-                    //     }
-                    // ]}
-                    // data.d.push(EditSet);
+
                     console.log(data.d)
                     setPages(JSON.parse(data.d));
                 }
@@ -111,7 +100,7 @@ color:var(--primary);
         <Wrapper>
             <Sidebar>
                 <ul>
-                    {pages !== null &&
+                    {pages &&
                         pages.map((item, index) => {
                             let liClasses = classNames({
                                 'active': (activePageId === index) ? true : false,
@@ -124,7 +113,7 @@ color:var(--primary);
                         })}
                 </ul>
             </Sidebar>
-            {pages !== null ? <ContentArea content={pages[activePageId]} fileName={caseNo} pageIndex={pages[activePageId].Page} />:<Loading><FontAwesomeIcon className="icon" icon={faSpinner}  size="4x"  spin /></Loading>}
+            {pages ? <ContentArea content={pages[activePageId]} fileName={caseNo} pageIndex={pages[activePageId].Page} />:<Loading><FontAwesomeIcon className="icon" icon={faSpinner}  size="4x"  spin /></Loading>}
         </Wrapper>
     );
 }

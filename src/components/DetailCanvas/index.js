@@ -7,67 +7,7 @@ const DetailCanvas = ({srcFile,refFile, target}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
     const [loaded, setLoaded] = useState(false);
-    useEffect(() => {
-
-   
-            drawCanvaDetail();
-
-   
-    });
-    // const drawCanvaDetail = ()=>{
-    //     return new Promise((resolve, reject) => {
-    //             //source canvas area
-    //             const canvasSrcObj = canvasSrc.current;
-    //             const canvasSrcCtx = canvasSrcObj.getContext('2d');
-    //             const imgSrc = new Image();
-    //             imgSrc.style = loaded ? {} : { display: 'none' };
-    //             imgSrc.src = srcFile;
-    //             imgSrc.onload = () => {
-    //                 canvasSrcObj.width = target.Width;
-    //                 canvasSrcObj.height = target.Height;
-    //                 canvasSrcCtx.drawImage(
-    //                     imgSrc, 
-    //                     target.X, 
-    //                     target.Y, 
-    //                     target.Width, 
-    //                     target.Height, 
-    //                     0, 0, 
-    //                     target.Width, 
-    //                     target.Height
-    //                     );
-    //                     resolve(imgSrc.height)
-    //                     setLoadCount();
-    //             }
-    //             imgSrc.onerror = reject;
-    //         })
-    // }
-    // const drawCanvaDetail2 = ()=>{
-    //     return new Promise((resolve, reject) => {
-    //             //reference canvas area
-    //             const canvasRefObj = canvasRef.current;
-    //             const canvasRefCtx = canvasRefObj.getContext('2d');
-    //             const imgRef = new Image();
-    //             imgRef.style = loaded ? {} : { display: 'none' };
-    //             imgRef.src = refFile;
-    //             imgRef.onload = () => {
-    //                 canvasRefObj.width = target.Width;
-    //                 canvasRefObj.height = target.Height;
-    //                 canvasRefCtx.drawImage(
-    //                     imgRef, 
-    //                     target.X, 
-    //                     target.Y, 
-    //                     target.Width, 
-    //                     target.Height, 
-    //                     0, 0, 
-    //                     target.Width, 
-    //                     target.Height
-    //                     );
-    //                     resolve(imgRef.height);
-    //                     setLoaded(true);
-    //             }
-    //             imgRef.onerror = reject;
-    //         })
-    // }
+    useEffect(() => {drawCanvaDetail();});
         const drawCanvaDetail = ()=>{
             let count = 2;
                 //source canvas area

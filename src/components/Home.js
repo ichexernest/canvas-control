@@ -5,53 +5,53 @@ import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner} from '@fortawesome/free-solid-svg-icons'
 import { Link } from "react-router-dom";
-const Home = () => {
-    const Wrapper = styled.div`
-        max-height: 92vh;
-        height: 92vh;
-        width: 100vw;
-        overflow-y:auto;
-    `;
-    const ControlWrapper = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items: center;
-    padding: 0 12px;
-    `;
-    const Loading = styled.div`
+const Wrapper = styled.div`
+max-height: 92vh;
+height: 92vh;
+width: 100vw;
+overflow-y:auto;
+`;
+const ControlWrapper = styled.div`
+display:flex;
+justify-content:space-between;
+align-items: center;
+padding: 0 12px;
+`;
+const Loading = styled.div`
 width:100%;
 height:100%;
 display:flex;
 justify-content:center;
 align-items: center;
 color:var(--primary);
-    `;
-    const NewBtn = styled.button`
-    background-color: var(--white);
-    border: 1px solid var(--white);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    color: var(--primary);
-    padding: 5px 25px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: var(--fontBig);
-    margin: 15px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    border-radius: 50px;
-    :hover{
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    }
-    [disabled=disabled], :disabled {
-        background-color: var(--btnDisabledColor);
-        :hover{
-            background-color: var(--btnDisabledColor);
-            cursor:no-drop;
-        }
-    }
-    `;
+`;
+const NewBtn = styled.button`
+background-color: var(--white);
+border: 1px solid var(--white);
+box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+color: var(--primary);
+padding: 5px 25px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: var(--fontBig);
+margin: 15px;
+transition-duration: 0.4s;
+cursor: pointer;
+border-radius: 50px;
+:hover{
+box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+[disabled=disabled], :disabled {
+background-color: var(--btnDisabledColor);
+:hover{
+    background-color: var(--btnDisabledColor);
+    cursor:no-drop;
+}
+}
+`;
+const Home = () => {
     const tranDateToString = (begin) => {
         let date = new Date();
 
