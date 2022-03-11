@@ -16,25 +16,15 @@ max-height: 7%;
 min-height: 7%;
 border-bottom: 1px solid var(--lightGrey);
 `;
-export const ContentWrapper = styled.div`
+export const Grid = styled.div`
 width: 100%;
-max-height: 53%;
-min-height: 53%;
+max-height:  ${props => props.isMain ? "53%" : "40%"};
+min-height:  ${props => props.isMain ? "53%" : "40%"};
 display: flex;
 flex-direction: row;
 flex: 1;
 justify-content: stretch;
 border-bottom: 1px solid var(--lightGrey);
-`;
-export const DetailWrapper = styled.div`
-width: 100%;
-max-height: 40%;
-min-height: 40%;
-display: flex;
-flex-direction: row;
-flex: 1;
-justify-content: stretch;
-border-bottom: 1px solid #cccccc;
 `;
 export const ActionGroup = styled.div`
 position: relative;

@@ -130,7 +130,7 @@ const CreateNew = () => {
     const { register, handleSubmit } = useForm();
     const onSubmit = (data) => {
 
-        alert(JSON.stringify(data.source));
+        alert(JSON.stringify(data));
     };
     // const o = (e)=>{
     //     console.log(e.target.value);

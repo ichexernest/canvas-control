@@ -52,8 +52,8 @@ const Detail = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        //fetchPageList();
-        fetchPageListTest();
+        fetchPageList();
+        //fetchPageListTest();
     }, [])
 
     const back = ()=>{

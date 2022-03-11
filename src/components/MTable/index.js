@@ -204,7 +204,7 @@ const MTable = ({ data }) => {
     []
   )
 
-  const mainData = useMemo(() => data, [])
+  const mainData = useMemo(() => data, [data])
   return (
     <Wrapper>
       <Table columns={columns} data={mainData} />

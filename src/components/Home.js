@@ -75,8 +75,8 @@ const Home = () => {
     const [eDate, setEDate] = useState(initEDate);
 
     useEffect(() => {
-        //fetchCase(sDate, eDate);
-        fetchCaseTest(sDate, eDate);
+        fetchCase(sDate, eDate);
+        //fetchCaseTest(sDate, eDate);
     }, [])
     const fetchCase = (searchTermS, searchTermE) => {
         let szSCreateDTime = '', szECreateDTime = '';
@@ -100,11 +100,13 @@ const Home = () => {
             }).then((response) => response.json())
             .then((data) => {
                 // response in data
+                console.log(data.d);
                 setData(JSON.parse(data.d));
                 setSDate(searchTermS);
                 setEDate(searchTermE);
             }).catch((error) => {
                 //handle your error
+                console.log(error);
             });
     };
     //fake data test
@@ -114,8 +116,8 @@ const Home = () => {
             szSCreateDTime = searchTermS.replaceAll("-", "");
             szECreateDTime = searchTermE.replaceAll("-", "");
         }
-        console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
-        let data = [
+        console.log(`heressss get range ${szSCreateDTime} to ${szECreateDTime}`)
+        let data1 = [
             { "Id": 2, "Vhno": "Case01", "CreateTime": "20210924093816032", "CreateEmp": "N000000930", "Co": "XD", "Dp": "", "SrcFileName": "Case01_src.png", "RefFileName": "Case01_ref.png", "Description": "測試", "Email": "N000000930@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000000930", "Txtm": "20210924093816035" },
             { "Id": 6, "Vhno": "a6d3048f-4b77-4a3b-bda2-5993254f6ed4", "CreateTime": "20210927155949084", "CreateEmp": "N000000930", "Co": "XD", "Dp": "", "SrcFileName": "a6d3048f-4b77-4a3b-bda2-5993254f6ed4_src.png", "RefFileName": "a6d3048f-4b77-4a3b-bda2-5993254f6ed4_ref.png", "Description": "", "Email": "N000000930@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000000930", "Txtm": "20210927155949084" },
             { "Id": 7, "Vhno": "a0f3762a-d2ad-42eb-b23d-ca9a11ff5b24", "CreateTime": "20210928123959969", "CreateEmp": "N000000930", "Co": "XD", "Dp": "", "SrcFileName": "a0f3762a-d2ad-42eb-b23d-ca9a11ff5b24_src.png", "RefFileName": "a0f3762a-d2ad-42eb-b23d-ca9a11ff5b24_ref.png", "Description": "", "Email": "N000000930@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000000930", "Txtm": "20210928123959969" },
@@ -132,8 +134,8 @@ const Home = () => {
             { "Id": 18, "Vhno": "9450f592-f41f-4409-86d9-6d0ab1619519", "CreateTime": "20211202160215389", "CreateEmp": "N000126091", "Co": "XD", "Dp": "", "SrcFileName": "9450f592-f41f-4409-86d9-6d0ab1619519_src.png", "RefFileName": "9450f592-f41f-4409-86d9-6d0ab1619519_ref.png", "Description": "", "Email": "N000126091@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000126091", "Txtm": "20211202160215392" },
             { "Id": 19, "Vhno": "e90b4f36-0811-46a1-8e29-50688b2ad5d2", "CreateTime": "20211202160302306", "CreateEmp": "N000126091", "Co": "XD", "Dp": "", "SrcFileName": "e90b4f36-0811-46a1-8e29-50688b2ad5d2_src.png", "RefFileName": "e90b4f36-0811-46a1-8e29-50688b2ad5d2_ref.png", "Description": "", "Email": "N000126091@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000126091", "Txtm": "20211202160302306" }
         ];
-        setData(data);
-        console.log(`heres get fake data ${data}`)
+        setData(data1);
+        console.log(`heres get fake data ${data1}`)
         setSDate(searchTermS);
         setEDate(searchTermE);
     };
@@ -144,10 +146,11 @@ const Home = () => {
                 <Link to={`/CreateNew`}>
                     <NewBtn>+ 立案</NewBtn>
                 </Link>
-                <SearchBar fetchCase={fetchCaseTest} sDate={sDate} eDate={eDate} initSDate={initSDate} initEDate={initEDate} />
+                <SearchBar fetchCase={fetchCase} sDate={sDate} eDate={eDate} initSDate={initSDate} initEDate={initEDate} />
             </ControlWrapper>
             {data !== null ?
-                <MTable data={data} /> : <Loading><FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin /></Loading>}
+                <MTable data={data} /> : 
+                <Loading><FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin /></Loading>}
         </Wrapper>
     );
 }

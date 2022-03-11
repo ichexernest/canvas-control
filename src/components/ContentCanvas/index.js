@@ -1,6 +1,8 @@
 import { React, useEffect, useRef,useState } from "react";
-import { Wrapper, Canvas,S } from './ContentCanvas.styles';
-//import testImg from '../../images/caseA0827_save_ref_1.jpg';
+import { Wrapper, Canvas,Loading } from './ContentCanvas.styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+
 import { PanZoom } from 'react-easy-panzoom'
 
 const ContentCanvas = ({currFile,target,isAlign}) => {
@@ -12,6 +14,7 @@ const ContentCanvas = ({currFile,target,isAlign}) => {
         const img = new Image();
         img.src = currFile;
         img.onload = () => {
+            //setLoad(false);
             canvasObj.height = img.height;
             canvasObj.width = img.width;
             ctx.drawImage(img, 0, 0);
@@ -33,7 +36,9 @@ const ContentCanvas = ({currFile,target,isAlign}) => {
                 boundaryRatioVertical={0.9}
                 boundaryRatioHorizontal={0.9}
                 enableBoundingBox>
-                <S style={{display: load ? 'none' : 'block' }}>ddd</S>
+                <Loading hasLoad={load}>
+                    <FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin />
+                </Loading>
                 <Canvas ref={canvasRef} />
             </PanZoom>
         </Wrapper>
