@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classNames from 'classnames';
-import { Wrapper, ActionGroup, ControlBar, Grid, ContentList, Button } from './ContentArea.styles';
+import { Wrapper, ActionGroup, ControlBar, Grid, ContentList, Button, ToggleButton } from './ContentArea.styles';
 
 import ContentCanvas from '../ContentCanvas';
 import DetailCanvas from '../DetailCanvas';
@@ -11,6 +11,7 @@ const ContentArea = ({ content, fileName }) => {
     const [activePathId, setActivePathId] = useState(0); //active file display Display
     const [isAlign, setIsAlign] = useState(true); //Only align pattern show detection block
     const [hide, setHide] = useState(false);
+    const [pageContent, setPageContent]=useState(content);
 
     const handleCurrFile = (i) => {
         setActivePathId(i);
@@ -23,9 +24,9 @@ const ContentArea = ({ content, fileName }) => {
     return (
         <Wrapper>
             <ControlBar>
-                <h3>{`${fileName} page:${content.Page}`}</h3>
+                <h3>{`${fileName} page:${pageContent.Page}`}</h3>
                 <ActionGroup>
-                    {content.FilePathSets.map((item, index) => {
+                    {pageContent.FilePathSets.map((item, index) => {
                         const btnTextIndex = ["align overlay", "original overlay", "source", "reference", "source(align)"];
                         let btnClasses = classNames({
                             'active': (activePathId === index) ? true : false,
@@ -38,53 +39,38 @@ const ContentArea = ({ content, fileName }) => {
             </ControlBar>
             <Grid isMain={true}>
                 <ContentList>
-                    <button onClick={() => changeList()}>show all/issue only </button>
+                    <ToggleButton onClick={() => changeList()}>show all/issue only </ToggleButton>
                     <ul>
-                        {content.Sets.map((item, index) => 
-                        // {
-                        //     let liClasses = classNames({
-                        //         'success': (item.OcrSSIM < 1 && item.Pass) ? true : false,
-                        //         'error': (item.OcrSSIM < 1 && !item.Pass) ? true : false,
-                        //         'active': (activeTargetId === index) ? true : false,
-                        //         'd-none': (item.OcrSSIM === 1) ? hide : false,
-                        //     });
-                        //     return (
-                        //         <li 
-                        //         key={item.BoxIndex} 
-                        //         className={liClasses} 
-                        //         onClick={() => handleSelectTarget(index)} 
-                        //         title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.BoxIndex}. {item.SrcText}:{item.OcrSSIM}</li>
-                        //     )
-                        // }
-                        (<ListItem item={item} index={index} setActiveTargetId={setActiveTargetId} activeTargetId={activeTargetId} hide={hide}/>)
+                        {pageContent.Sets.map((item, index) =>
+                            <ListItem item={item} index={index} setActiveTargetId={setActiveTargetId} activeTargetId={activeTargetId} hide={hide} />
                         )}
                     </ul>
                 </ContentList>
                 <ContentCanvas
-                    currFile={content.FilePathSets[activePathId]}
-                    target={content.Sets[activeTargetId].Rect}
+                    currFile={pageContent.FilePathSets[activePathId]}
+                    target={pageContent.Sets[activeTargetId].Rect}
                     isAlign={isAlign} />
             </Grid>
             <Grid isMain={false}>
                 <DetailInfo
                     index={activeTargetId}
-                    srcText={content.Sets[activeTargetId].SrcText}
-                    refText={content.Sets[activeTargetId].RefText}
-                    ocrSSIM={content.Sets[activeTargetId].OcrSSIM}
-                    ssim={content.Sets[activeTargetId].Ssim}
-                    qatm_score={content.Sets[activeTargetId].Qatm_score}
-                    pass={content.Sets[activeTargetId].Pass} />
+                    srcText={pageContent.Sets[activeTargetId].SrcText}
+                    refText={pageContent.Sets[activeTargetId].RefText}
+                    ocrSSIM={pageContent.Sets[activeTargetId].OcrSSIM}
+                    ssim={pageContent.Sets[activeTargetId].Ssim}
+                    qatm_score={pageContent.Sets[activeTargetId].Qatm_score}
+                    pass={pageContent.Sets[activeTargetId].Pass}
+                    setPageContent={setPageContent} />
                 <DetailCanvas
-                    srcFile={content.FilePathSets[4]}
-                    refFile={content.FilePathSets[3]}
-                    target={content.Sets[activeTargetId].Rect} />
+                    srcFile={pageContent.FilePathSets[4]}
+                    refFile={pageContent.FilePathSets[3]}
+                    target={pageContent.Sets[activeTargetId].Rect} />
             </Grid>
         </Wrapper>
     )
 }
 
-//TODO: 
-const ListItem =({item,index,setActiveTargetId,activeTargetId,hide})=>{
+const ListItem = ({ item, index, setActiveTargetId, activeTargetId, hide }) => {
     const handleSelectTarget = (i) => {
         setActiveTargetId(i);
     }
@@ -94,12 +80,12 @@ const ListItem =({item,index,setActiveTargetId,activeTargetId,hide})=>{
         'active': (activeTargetId === index) ? true : false,
         'd-none': (item.OcrSSIM === 1) ? hide : false,
     });
-    return(
-        <li 
-        key={item.BoxIndex} 
-        className={liClasses} 
-        onClick={() => handleSelectTarget(index)} 
-        title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.BoxIndex}. {item.SrcText}:{item.OcrSSIM}</li>
+    return (
+        <li
+            key={item.BoxIndex}
+            className={liClasses}
+            onClick={() => handleSelectTarget(index)}
+            title={`ocr:${item.OcrSSIM}/src:${item.SrcText}`}>{item.BoxIndex}. {item.SrcText}:{item.OcrSSIM}</li>
     );
 }
 

@@ -74,6 +74,24 @@ border-radius: 5px;
     }
 }
 `;
+export const ToggleButton = styled.button`
+background-color:  var(--tableActionColor);
+border:0;
+color: var(--primary);
+padding: 5px 10px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+margin: 8px 8px;
+transition-duration: 0.1s;
+cursor: pointer;
+border-radius: 5px;
+:hover{
+    background-color: var(--btnActionColor);
+    color: var(--white);
+}
+`;
 export const DetailInfo = styled.div`
 position: relative;
 display: flex;
