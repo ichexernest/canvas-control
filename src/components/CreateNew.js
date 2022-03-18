@@ -4,6 +4,7 @@ import { faArrowLeft,faFile } from '@fortawesome/free-solid-svg-icons'
 import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { Link } from 'react-router-dom';
+import FileUploader from "./FileUploader";
 const Wrapper = styled.div`
 max-height: 92vh;
 height: 92vh;
@@ -161,6 +162,7 @@ const CreateNew = () => {
                             <button>選擇檔案</button>
                         </label>
                     </UploadArea>
+                    <FileUploader />
                     <InputLabel>信箱</InputLabel>
                     <InputContent><input {...register("mail")} placeholder="mail" /></InputContent>
                     <InputLabel>說明</InputLabel>

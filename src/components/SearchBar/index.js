@@ -18,6 +18,9 @@ const SearchBar = ({ fetchCase, sDate, eDate, initSDate, initEDate}) => {
         fetchCase(inputSDate, inputEDate);
     };
     const handleRefreshEvent = () => {
+        console.log(`${initSDate} --------------${initEDate}`)
+        setInputSDate(initSDate)
+        setInputEDate(initEDate)
         fetchCase(initSDate,initEDate);
     };
 
