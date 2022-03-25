@@ -7,7 +7,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import ContentArea from "./ContentArea";
-//import API from '../API';
+import API from '../API';
 const Wrapper = styled.div`
 max-height: 92vh;
 height: 92vh;
@@ -59,36 +59,23 @@ const Detail = () => {
     const back = () => {
         navigate(-1);
     }
-    const fetchPageList = () => {
-        console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime}`);
-        fetch(
-            'http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx/GetAllPage',
-            {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'p_szCaseNo': caseNo,
-                    'p_szCreateDTime': createDTime
-                })
-            }).then((response) => response.json())
-            .then((data) => {
-                // response in data
-                console.log(`data d parsr ::${JSON.parse(data.d).length}::: ${JSON.parse(data.d)[0].Sets}`);
-                if (JSON.parse(data.d).length === 0 || JSON.parse(data.d) === null) {
-                    alert(`no page data`);
-                    back();
-                } else if(JSON.parse(data.d)[0].Sets.length === 0){
-                    alert(`no Sets in page`);
-                    back();
-                } else { setPages(JSON.parse(data.d)); }
-            }).catch((error) => {
-                //handle your error
-                alert(`fetch failed : ${error}`);
+    const fetchPageList = async () => {
+        try {
+            console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime}`);
+            const data = await API.getPageList(caseNo, createDTime);
+            const pageList =JSON.parse(data.d);
+            //console.log(`data d parsr ::${pageList.length}::: ${pageList[0].Sets}`);
+            if (pageList.length === 0 || pageList === null) {
+                alert(`no page data`);
                 back();
-            });
+            } else if (pageList[0].Sets.length === 0) {
+                alert(`no Sets in page`);
+                back();
+            } else { setPages(pageList); }
+        } catch (error) {
+            alert(error);
+            back();
+        }
     };
     //fake data test
     const fetchPageListTest = () => {
@@ -120,7 +107,6 @@ const Detail = () => {
                 ]
             }
         ];
-
         console.log(`heres get fake pages ${data}`)
         setPages(data);
     };

@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Link } from "react-router-dom";
+import API from '../API';
 const Wrapper = styled.div`
 max-height: 92vh;
 height: 92vh;
@@ -78,44 +79,24 @@ const Home = () => {
         fetchCase(sDate, eDate);
         //fetchCaseTest(sDate, eDate);
     }, [])
-    const fetchCase = (searchTermS, searchTermE) => {
-        let szSCreateDTime = '', szECreateDTime = '';
-        if (searchTermS && searchTermE) {
-            szSCreateDTime = searchTermS.replaceAll("-", "");
-            szECreateDTime = searchTermE.replaceAll("-", "");
+    const fetchCase = async (searchTermS, searchTermE) => {
+        try {
+            let szSCreateDTime = searchTermS ? searchTermS.replaceAll('-', '') : '';
+            let szECreateDTime = searchTermE ? searchTermE.replaceAll('-', '') : '';
+            console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
+            const data = await API.getCase(szSCreateDTime, szECreateDTime);
+            console.log(data.d);
+            setData(JSON.parse(data.d));
+            setSDate(searchTermS);
+            setEDate(searchTermE);
+        } catch (error) {
+            console.log(error);
         }
-        console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
-        fetch(
-            'http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx/FindCase',
-            {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'p_szSCrateDTime': szSCreateDTime,
-                    'p_szECrateDTime': szECreateDTime
-                })
-            }).then((response) => response.json())
-            .then((data) => {
-                // response in data
-                console.log(data.d);
-                setData(JSON.parse(data.d));
-                setSDate(searchTermS);
-                setEDate(searchTermE);
-            }).catch((error) => {
-                //handle your error
-                console.log(error);
-            });
     };
     //fake data test
     const fetchCaseTest = (searchTermS, searchTermE) => {
-        let szSCreateDTime = '', szECreateDTime = '';
-        if (searchTermS && searchTermE) {
-            szSCreateDTime = searchTermS.replaceAll("-", "");
-            szECreateDTime = searchTermE.replaceAll("-", "");
-        }
+        let szSCreateDTime = searchTermS ? searchTermS.replaceAll('-', '') : '';
+        let szECreateDTime = searchTermE ? searchTermE.replaceAll('-', '') : '';
         console.log(`heressss get range ${szSCreateDTime} to ${szECreateDTime}`)
         let data1 = [
             { "Id": 2, "Vhno": "Case01", "CreateTime": "20210924093816032", "CreateEmp": "N000000930", "Co": "XD", "Dp": "", "SrcFileName": "Case01_src.png", "RefFileName": "Case01_ref.png", "Description": "測試", "Email": "N000000930@FPG", "Result": "Y", "Report": null, "StopMk": "N", "Txemp": "N000000930", "Txtm": "20210924093816035" },
@@ -149,7 +130,7 @@ const Home = () => {
                 <SearchBar fetchCase={fetchCase} sDate={sDate} eDate={eDate} initSDate={initSDate} initEDate={initEDate} />
             </ControlWrapper>
             {data !== null ?
-                <MTable data={data} /> : 
+                <MTable data={data} /> :
                 <Loading><FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin /></Loading>}
         </Wrapper>
     );

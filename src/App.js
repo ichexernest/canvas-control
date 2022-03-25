@@ -1,6 +1,6 @@
 import React from 'react';
 //routing
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { GlobalStyle } from './GlobalStyle';
 import Home from './components/Home';
@@ -13,18 +13,22 @@ const Layout = (props) => (
     {props.children}
   </>
 )
-const App = () => (
+const App = () => {
+  let homePage = "ScanDoc";
+  return(
   <>
-<Layout>
-    <Routes>
-        <Route path='/' element={<Home />} />
+    <Layout>
+      <Routes>
+        <Route path={homePage} element={<Home />} />
         <Route path='/:caseNo/:createDTime' element={<Detail />} />
         <Route path='/CreateNew' element={<CreateNew />} />
-    </Routes>
+        <Route path='/' element={<Navigate to={homePage} replace />} />
+        <Route path='*' element={<Navigate to={homePage} replace />} />
+      </Routes>
     </Layout>
     <GlobalStyle />
   </>
 
-)
+)}
 
 export default App;

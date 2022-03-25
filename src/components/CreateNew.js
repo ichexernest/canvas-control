@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft,faFile } from '@fortawesome/free-solid-svg-icons'
-import React, {useState} from "react";
-import { useForm } from "react-hook-form";
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import FileUploader from "./FileUploader";
 const Wrapper = styled.div`
@@ -77,65 +76,17 @@ outline:none;
 }
 }
 `;
-const UploadArea = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-margin-bottom:20px;
-label{
-background-color: var(--white);
-border: 2px dashed var(--primary);
-border-radius:8px;
-color: var(--primary);
-display:flex;
-flex-direction:column;
-padding: 20px;
-margin:15px;
-width:100%;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-input{
-    display:none;
-}
-p{color:var(--primary);
-font-size:.8rem}
-button{
-    pointer-events: none;
-    background-color: rgb(34, 20, 95);
-    border: 1px solid rgb(124, 110, 185);
-    color: white;
-    padding: 5px 15px;
-    height:34px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    border-radius: 5px;
-    }
-    :hover{
-        cursor: pointer;
-        background-color:var(--tableActionColor);
-    }
-}
-}
-`;
 const CreateNew = () => {
-    const [fileSName, setFileSName] = useState('');
-    const [fileRName, setFileRName] = useState('');
-
-    const { register, handleSubmit } = useForm();
-    const onSubmit = (data) => {
-
-        alert(JSON.stringify(data));
-    };
-    // const o = (e)=>{
-    //     console.log(e.target.value);
-    // }
+    const [inputs, setInputs] = useState({});
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setInputs(values => ({ ...values, [name]: value }))
+    }
+    const handleSubmitE = (event) => {
+        event.preventDefault();
+        alert(JSON.stringify(inputs));
+    }
     return (
         <>
             <Wrapper>
@@ -145,32 +96,44 @@ const CreateNew = () => {
                     </Link >
                     <Title>立案新增</Title>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <UploadArea>
-                        <label>
-                            <input {...register("source")} placeholder="source" type="file" onChange={(e)=>setFileSName(e.target.value)} />
-                            <FontAwesomeIcon className="icon" icon={faFile} size="4x" />
-                            <h3>來源文件</h3>
-                            <p>{fileSName}</p>
-                            <button>選擇檔案</button>
-                        </label>
-                        <label>
-                            <input {...register("reference")} placeholder="reference" type="file" onChange={(e)=>setFileRName(e.target.value)} />
-                            <FontAwesomeIcon className="icon" icon={faFile} size="4x" />
-                            <h3>參考文件</h3>
-                            <p>{fileRName}</p>
-                            <button>選擇檔案</button>
-                        </label>
-                    </UploadArea>
+                <form onSubmit={handleSubmitE}>
                     <FileUploader />
                     <InputLabel>信箱</InputLabel>
-                    <InputContent><input {...register("mail")} placeholder="mail" /></InputContent>
+                    <InputContent>
+                        <input
+                            type="text"
+                            name="mail"
+                            value={inputs.mail || ""}
+                            onChange={handleChange}
+                            placeholder="mail" />
+                    </InputContent>
                     <InputLabel>說明</InputLabel>
-                    <InputContent><input {...register("description")} placeholder="description" /></InputContent>
+                    <InputContent>
+                        <input
+                            type="text"
+                            name="description"
+                            value={inputs.description || ""}
+                            onChange={handleChange}
+                            placeholder="description" />
+                    </InputContent>
                     <InputLabel>上傳人</InputLabel>
-                    <InputContent><input {...register("uploader")} placeholder="uploader" /></InputContent>
+                    <InputContent>
+                        <input
+                            type="text"
+                            name="uploader"
+                            value={inputs.uploader || ""}
+                            onChange={handleChange}
+                            placeholder="uploader" />
+                    </InputContent>
                     <InputLabel>上傳時間</InputLabel>
-                    <InputContent><input {...register("uploadTime")} placeholder="uploadTime" /></InputContent>
+                    <InputContent>
+                        <input
+                            type="text"
+                            name="uploadTime"
+                            value={inputs.uploadTime || ""}
+                            onChange={handleChange}
+                            placeholder="uploadTime" />
+                    </InputContent>
                     <NewBtn type="submit">建立</NewBtn>
                 </form>
             </Wrapper>

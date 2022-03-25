@@ -1,76 +1,41 @@
-import {
-  SEARCH_BASE_URL,
-  POPULAR_BASE_URL,
-  API_URL,
-  API_KEY,
-  REQUEST_TOKEN_URL,
-  LOGIN_URL,
-  SESSION_ID_URL
-} from './config';
-
+const BASE_URL='http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx';
 const defaultConfig = {
   method: 'POST',
   headers: {
+    'Accept': 'application/json',
     'Content-Type': 'application/json'
   }
 };
 
 const apiSettings = {
-  fetchMovies: async (searchTerm, page) => {
-    const endpoint = searchTerm
-      ? `${SEARCH_BASE_URL}${searchTerm}&page=${page}`
-      : `${POPULAR_BASE_URL}&page=${page}`;
-    return await (await fetch(endpoint)).json();
-  },
-  fetchMovie: async movieId => {
-    const endpoint = `${API_URL}movie/${movieId}?api_key=${API_KEY}`;
-    return await (await fetch(endpoint)).json();
-  },
-  fetchCredits: async movieId => {
-    const creditsEndpoint = `${API_URL}movie/${movieId}/credits?api_key=${API_KEY}`;
-    return await (await fetch(creditsEndpoint)).json();
-  },
-  // Bonus material below for login
-  getRequestToken: async () => {
-    const reqToken = await (await fetch(REQUEST_TOKEN_URL)).json();
-    return reqToken.request_token;
-  },
-  authenticate: async (requestToken, username, password) => {
+  getCase: async (p_szSCrateDTime, p_szECrateDTime) => {
+    const url = `${BASE_URL}/FindCase`;
     const bodyData = {
-      username,
-      password,
-      request_token: requestToken
+      'p_szSCrateDTime': p_szSCrateDTime,
+      'p_szECrateDTime': p_szECrateDTime
     };
-    // First authenticate the requestToken
     const data = await (
-      await fetch(LOGIN_URL, {
+      await fetch(url, {
         ...defaultConfig,
         body: JSON.stringify(bodyData)
       })
     ).json();
-    // Then get the sessionId with the requestToken
-    if (data.success) {
-      const sessionId = await (
-        await fetch(SESSION_ID_URL, {
-          ...defaultConfig,
-          body: JSON.stringify({ request_token: requestToken })
-        })
-      ).json();
-      return sessionId;
-    }
+    return await data;
   },
-  rateMovie: async (sessionId, movieId, value) => {
-    const endpoint = `${API_URL}movie/${movieId}/rating?api_key=${API_KEY}&session_id=${sessionId}`;
-
-    const rating = await (
-      await fetch(endpoint, {
+  getPageList: async (caseNo, createDTime) => {
+    const url = `${BASE_URL}/GetAllPage`;
+    const bodyData = {
+      'p_szCaseNo': caseNo,
+      'p_szCreateDTime': createDTime
+    };
+    const data = await (
+      await fetch(url, {
         ...defaultConfig,
-        body: JSON.stringify({ value })
+        body: JSON.stringify(bodyData)
       })
     ).json();
-
-    return rating;
-  }
+    return await data;
+  },
 };
 
 export default apiSettings;

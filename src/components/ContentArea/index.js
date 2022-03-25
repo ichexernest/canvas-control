@@ -42,7 +42,7 @@ const ContentArea = ({ content, fileName }) => {
                     <ToggleButton onClick={() => changeList()}>show all/issue only </ToggleButton>
                     <ul>
                         {pageContent.Sets.map((item, index) =>
-                            <ListItem item={item} index={index} setActiveTargetId={setActiveTargetId} activeTargetId={activeTargetId} hide={hide} />
+                            <ListItem key={item.BoxIndex} item={item} index={index} setActiveTargetId={setActiveTargetId} activeTargetId={activeTargetId} hide={hide} />
                         )}
                     </ul>
                 </ContentList>
