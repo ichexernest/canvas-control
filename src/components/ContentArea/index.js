@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import classNames from 'classnames';
 import { Wrapper, ActionGroup, ControlBar, Grid, ContentList, Button, ToggleButton } from './ContentArea.styles';
-
+import API from '../../API';
 import ContentCanvas from '../ContentCanvas';
 import DetailCanvas from '../DetailCanvas';
 import DetailInfo from '../DetailInfo';
+import { CaseContext } from "../Detail";
 
 const ContentArea = ({ content, fileName }) => {
     const [activeTargetId, setActiveTargetId] = useState(0); //active ocr area
@@ -12,7 +13,7 @@ const ContentArea = ({ content, fileName }) => {
     const [isAlign, setIsAlign] = useState(true); //Only align pattern show detection block
     const [hide, setHide] = useState(false);
     const [pageContent, setPageContent]=useState(content);
-
+    const { caseNo,createDTime } = useContext(CaseContext);
     const handleCurrFile = (i) => {
         setActivePathId(i);
         i !== 0 ? setIsAlign(false) : setIsAlign(true);
@@ -20,6 +21,24 @@ const ContentArea = ({ content, fileName }) => {
     const changeList = () => {
         setHide(!hide);
     }
+    useEffect(() => {
+        setPageContent(content);
+    }, [content])
+
+    const modifiedBoxPass = async () => {
+        try {
+            console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime} &page: ${pageContent.Page} &boxIndex: ${pageContent.Sets[activeTargetId].BoxIndex}`);
+            //const iCount = await API.modifiedBoxPass(caseNo, createDTime, pageContent.Page, pageContent.Sets[activeTargetId].BoxIndex);
+            
+            // if(iCount!==0){
+            //     //success
+            // }else{
+            //     //error
+            // }
+        } catch (error) {
+            alert(error);
+        }
+    };
 
     return (
         <Wrapper>
@@ -59,8 +78,10 @@ const ContentArea = ({ content, fileName }) => {
                     ocrSSIM={pageContent.Sets[activeTargetId].OcrSSIM}
                     ssim={pageContent.Sets[activeTargetId].Ssim}
                     qatm_score={pageContent.Sets[activeTargetId].Qatm_score}
+                    boxIndex={pageContent.Sets[activeTargetId].BoxIndex}
                     pass={pageContent.Sets[activeTargetId].Pass}
-                    setPageContent={setPageContent} />
+                    setPageContent={setPageContent}
+                    modifiedBoxPass={modifiedBoxPass} />
                 <DetailCanvas
                     srcFile={pageContent.FilePathSets[4]}
                     refFile={pageContent.FilePathSets[3]}

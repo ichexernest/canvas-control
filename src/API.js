@@ -11,8 +11,8 @@ const apiSettings = {
   getCase: async (p_szSCrateDTime, p_szECrateDTime) => {
     const url = `${BASE_URL}/FindCase`;
     const bodyData = {
-      'p_szSCrateDTime': p_szSCrateDTime,
-      'p_szECrateDTime': p_szECrateDTime
+      'p_szSCreateDTime': p_szSCrateDTime,
+      'p_szECreateDTime': p_szECrateDTime
     };
     const data = await (
       await fetch(url, {
@@ -27,6 +27,22 @@ const apiSettings = {
     const bodyData = {
       'p_szCaseNo': caseNo,
       'p_szCreateDTime': createDTime
+    };
+    const data = await (
+      await fetch(url, {
+        ...defaultConfig,
+        body: JSON.stringify(bodyData)
+      })
+    ).json();
+    return await data;
+  },
+  modifiedBoxPass: async (caseNo, createDTime, page, boxIndex) => {
+    const url = `${BASE_URL}/ModifiedBoxPass`;
+    const bodyData = {
+      'p_szCaseNo': caseNo,
+      'p_szCreateDTime': createDTime,
+      'p_iPage': page,
+      'p_iBox': boxIndex,
     };
     const data = await (
       await fetch(url, {

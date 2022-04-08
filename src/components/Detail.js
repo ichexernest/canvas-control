@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 //import Sidebar from "./Sidebar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -45,15 +45,15 @@ justify-content:center;
 align-items: center;
 color:var(--primary);
 `;
+export const CaseContext = createContext({});
 const Detail = () => {
     const { caseNo, createDTime } = useParams();
     const [activePageId, setActivePageId] = useState(0); //active ocr area
     const [pages, setPages] = useState(null); //main data
     const navigate = useNavigate();
-
     useEffect(() => {
-        fetchPageList();
-        //fetchPageListTest();
+        //fetchPageList();
+        fetchPageListTest();
     }, [])
 
     const back = () => {
@@ -63,7 +63,7 @@ const Detail = () => {
         try {
             console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime}`);
             const data = await API.getPageList(caseNo, createDTime);
-            const pageList =JSON.parse(data.d);
+            const pageList = JSON.parse(data.d);
             //console.log(`data d parsr ::${pageList.length}::: ${pageList[0].Sets}`);
             if (pageList.length === 0 || pageList === null) {
                 alert(`no page data`);
@@ -71,7 +71,18 @@ const Detail = () => {
             } else if (pageList[0].Sets.length === 0) {
                 alert(`no Sets in page`);
                 back();
-            } else { setPages(pageList); }
+            } else {
+                //turn to pass 
+                for (let i = 0; i < pageList.length; i++)
+                    pageList[i].PassSets.forEach(PassSet => {
+                        const isPass = (element) => element.BoxIndex == PassSet.BoxIndex;
+                        let passIndex = pageList[0].Sets.findIndex(isPass);
+                        if (passIndex != -1) {
+                            pageList[i].Sets[passIndex].Pass = true;
+                        }
+                    });
+                setPages(pageList);
+            }
         } catch (error) {
             alert(error);
             back();
@@ -104,9 +115,69 @@ const Detail = () => {
                     { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 379, "Y": 255, "Width": 63, "Height": 45 }, "Page": 0, "BoxIndex": 11, "OcrSSIM": 0.0, "SrcText": "Exp", "RefText": "臼", "Pass": false },
                     { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 315, "Y": 318, "Width": 439, "Height": 53 }, "Page": 0, "BoxIndex": 12, "OcrSSIM": -1.5833333333333335, "SrcText": "日里土醫科枝服份有呎公司", "RefText": "oawosk Ho MebicAt fedhNotosyfo昂", "Pass": false },
                     { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 318, "Y": 356, "Width": 436, "Height": 32 }, "Page": 0, "BoxIndex": 13, "OcrSSIM": 0.0, "SrcText": "FORMU5A BloMtDICAL TEGHHotn6y CORI", "RefText": "", "Pass": false }
+                ],
+                "PassSets": [
+                    {
+                        "Page": 0,
+                        "BoxIndex": 2,
+                        "Pass": true,
+                    },
+                    {
+                        "Page": 0,
+                        "BoxIndex": 5,
+                        "Pass": true,
+                    },
+                ]
+            },            {
+                "Page": 1,
+                "FilePathSets": [
+                    "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
+                    "http://upload.wikimedia.org/wikipedia/commons/3/32/EVD_Document1.jpg",
+                    "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
+                    "http://upload.wikimedia.org/wikipedia/commons/3/32/EVD_Document1.jpg",
+                    "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
+                ],
+                "Sets": [
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 28, "Y": 50, "Width": 232, "Height": 54 }, "Page": 0, "BoxIndex": 1, "OcrSSIM": 1.0, "SrcText": "MeDiPro", "RefText": "MeDiPro", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 570, "Y": 52, "Width": 132, "Height": 30 }, "Page": 0, "BoxIndex": 2, "OcrSSIM": 0.375, "SrcText": "保存侏什2-8C", "RefText": "(保存條件2-", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 481, "Y": 59, "Width": 76, "Height": 42 }, "Page": 0, "BoxIndex": 3, "OcrSSIM": 0.0, "SrcText": "WD", "RefText": "IL", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 280, "Y": 66, "Width": 194, "Height": 36 }, "Page": 0, "BoxIndex": 4, "OcrSSIM": 1.0, "SrcText": "AC-00013-05", "RefText": "AC-00013-05", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 576, "Y": 76, "Width": 76, "Height": 36 }, "Page": 0, "BoxIndex": 5, "OcrSSIM": 0.4, "SrcText": "10 ml", "RefText": " 10 n", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 130, "Y": 98, "Width": 40, "Height": 12 }, "Page": 0, "BoxIndex": 6, "OcrSSIM": "-Infinity", "SrcText": "", "RefText": "Diagno", "Pass": false },
+                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 9, "Y": 116, "Width": 392, "Height": 66 }, "Page": 0, "BoxIndex": 7, "OcrSSIM": 0.95652173913043481, "SrcText": "Antibody screening cell", "RefText": "Anfibody screening cell", "Pass": false },
+                ],
+                "PassSets": [
+                    {
+                        "Page": 0,
+                        "BoxIndex": 2,
+                        "Pass": true,
+                    },
+                    {
+                        "Page": 0,
+                        "BoxIndex": 5,
+                        "Pass": true,
+                    },
+                    {
+                        "Page": 0,
+                        "BoxIndex": 6,
+                        "Pass": true,
+                    },
+                    {
+                        "Page": 0,
+                        "BoxIndex": 7,
+                        "Pass": true,
+                    },
                 ]
             }
         ];
+        for (let i = 0; i < data.length; i++)
+            data[i].PassSets.forEach(PassSet => {
+                const isPass = (element) => element.BoxIndex == PassSet.BoxIndex;
+                let passIndex = data[0].Sets.findIndex(isPass);
+                if (passIndex != -1) {
+                    data[i].Sets[passIndex].Pass = true;
+                }
+            });
         console.log(`heres get fake pages ${data}`)
         setPages(data);
     };
@@ -115,25 +186,29 @@ const Detail = () => {
     }
 
     return (
-
-        <Wrapper>
-            <Sidebar>
-                <ul>
-                    {pages &&
-                        pages.map((item, index) => {
-                            let liClasses = classNames({
-                                'active': (activePageId === index) ? true : false,
-                            });
-                            return (
-                                <li key={item.Page} className={liClasses} onClick={() => handleSelectTarget(index)} >
-                                    <img src={item.FilePathSets[0]} alt={item.Page} />
-                                    page: {item.Page}
-                                </li>)
-                        })}
-                </ul>
-            </Sidebar>
-            {pages ? <ContentArea content={pages[activePageId]} fileName={caseNo} pageIndex={pages[activePageId].Page} /> : <Loading><FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin /></Loading>}
-        </Wrapper>
+        <CaseContext.Provider value={{
+            caseNo: caseNo,
+            createDTime: createDTime,
+        }}>
+            <Wrapper>
+                <Sidebar>
+                    <ul>
+                        {pages &&
+                            pages.map((item, index) => {
+                                let liClasses = classNames({
+                                    'active': (activePageId === index) ? true : false,
+                                });
+                                return (
+                                    <li key={item.Page} className={liClasses} onClick={() => handleSelectTarget(index)} >
+                                        <img src={item.FilePathSets[0]} alt={item.Page} />
+                                        page: {item.Page}
+                                    </li>)
+                            })}
+                    </ul>
+                </Sidebar>
+                {pages ? <ContentArea content={pages[activePageId]} fileName={caseNo} /> : <Loading><FontAwesomeIcon className="icon" icon={faSpinner} size="4x" spin /></Loading>}
+            </Wrapper>
+        </CaseContext.Provider>
     );
 }
 
