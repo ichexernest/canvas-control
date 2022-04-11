@@ -32,8 +32,8 @@ export const CaseContextProvider = ({ children }) => {
     const navigate = useNavigate();
     useEffect(() => {
         console.log(caseNo + createDTime)
-        fetchPageList();
-        //fetchPageListTest();
+        //fetchPageList();
+        fetchPageListTest();
     }, []);
     const fetchPageList = async () => {
         try {
@@ -155,7 +155,7 @@ export const CaseContextProvider = ({ children }) => {
                 }
             });
         console.log(`heres get fake pages ${data}`)
-        setPages(data);
+        setPages({ caseNo: caseNo, createDTime: createDTime, pageList: data });
     };
     const back = () => {
         navigate(-1);
