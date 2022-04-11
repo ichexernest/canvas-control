@@ -7,16 +7,16 @@ const DetailInfo = ({ index, srcText, refText, ocrSSIM, ssim, qatm_score, pass,b
         //setDisabled(!disabled);
         //post Change
         modifiedBoxPass();
-        setPageContent(
+        // setPageContent(
             
-        prevState => ({
-            Page:prevState.Page,
-            FilePathSets:[...prevState.FilePathSets],
-            Sets: prevState.Sets.map(
-                (el, index) => index === i ? { ...el, Pass: true } : el
-            )
-        })
-        )
+        // prevState => ({
+        //     Page:prevState.Page,
+        //     FilePathSets:[...prevState.FilePathSets],
+        //     Sets: prevState.Sets.map(
+        //         (el, index) => index === i ? { ...el, Pass: true } : el
+        //     )
+        // })
+        // )
 
     }
     useEffect(() => {

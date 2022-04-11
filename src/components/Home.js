@@ -76,8 +76,8 @@ const Home = () => {
     const [eDate, setEDate] = useState(initEDate);
 
     useEffect(() => {
-        //fetchCase(sDate, eDate);
-        fetchCaseTest(sDate, eDate);
+        fetchCase(sDate, eDate);
+        //fetchCaseTest(sDate, eDate);
     }, [])
     const fetchCase = async (searchTermS, searchTermE) => {
         try {
