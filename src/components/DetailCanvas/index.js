@@ -1,33 +1,39 @@
 import { React, useEffect, useRef,useState } from "react";
 import { Wrapper, Box, Canvas, BoxText } from './DetailCanvas.styles';
-//import testImg from '../../images/caseA0827_save_ref_1.jpg';
-import { PanZoom } from 'react-easy-panzoom'
+import { useAPI } from "../apiContext";
+import { PanZoom } from 'react-easy-panzoom';
 
-const DetailCanvas = ({srcFile,refFile, target}) => {
+
+const DetailCanvas = ({index,pageIndex}) => {
     const canvasRef = useRef(null);
     const canvasSrc = useRef(null);
+    const { pages } = useAPI();
+    const pageBase = pages.pageList[pageIndex];
+    
     const [loaded, setLoaded] = useState(false);
-    useEffect(() => {drawCanvaDetail();});
-        const drawCanvaDetail = ()=>{
+
+    useEffect(() => {drawCanvaDetail()},[index,pageIndex]);
+        
+    const drawCanvaDetail = ()=>{
             let count = 2;
                 //source canvas area
                 const canvasSrcObj = canvasSrc.current;
                 const canvasSrcCtx = canvasSrcObj.getContext('2d');
                 const imgSrc = new Image();
                 imgSrc.style = loaded ? {} : { display: 'none' };
-                imgSrc.src = srcFile;
+                imgSrc.src = pageBase.FilePathSets[4];
                 imgSrc.onload = () => {
-                    canvasSrcObj.width = target.Width;
-                    canvasSrcObj.height = target.Height;
+                    canvasSrcObj.width = pageBase.Sets[index].Rect.Width;
+                    canvasSrcObj.height = pageBase.Sets[index].Rect.Height;
                     canvasSrcCtx.drawImage(
                         imgSrc, 
-                        target.X, 
-                        target.Y, 
-                        target.Width, 
-                        target.Height, 
+                        pageBase.Sets[index].Rect.X, 
+                        pageBase.Sets[index].Rect.Y, 
+                        pageBase.Sets[index].Rect.Width, 
+                        pageBase.Sets[index].Rect.Height, 
                         0, 0, 
-                        target.Width, 
-                        target.Height
+                        pageBase.Sets[index].Rect.Width, 
+                        pageBase.Sets[index].Rect.Height
                         );
                         count--;
                 }
@@ -37,19 +43,19 @@ const DetailCanvas = ({srcFile,refFile, target}) => {
                 const canvasRefCtx = canvasRefObj.getContext('2d');
                 const imgRef = new Image();
                 imgRef.style = loaded ? {} : { display: 'none' };
-                imgRef.src = refFile;
+                imgRef.src = pageBase.FilePathSets[3];
                 imgRef.onload = () => {
-                    canvasRefObj.width = target.Width;
-                    canvasRefObj.height = target.Height;
+                    canvasRefObj.width = pageBase.Sets[index].Rect.Width;
+                    canvasRefObj.height = pageBase.Sets[index].Rect.Height;
                     canvasRefCtx.drawImage(
                         imgRef, 
-                        target.X, 
-                        target.Y, 
-                        target.Width, 
-                        target.Height, 
+                        pageBase.Sets[index].Rect.X, 
+                        pageBase.Sets[index].Rect.Y, 
+                        pageBase.Sets[index].Rect.Width, 
+                        pageBase.Sets[index].Rect.Height, 
                         0, 0, 
-                        target.Width, 
-                        target.Height
+                        pageBase.Sets[index].Rect.Width, 
+                        pageBase.Sets[index].Rect.Height
                         );
                         count--;
                 }

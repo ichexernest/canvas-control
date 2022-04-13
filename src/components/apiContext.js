@@ -1,39 +1,57 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, { useContext, useState, useEffect, createContext, useReducer } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../API';
-import LoadingImg from '../images/loadingImg.png';
-//const APIContext = createContext();
 const CaseContext = createContext();
-
+const initialState = {
+    caseNo: '',
+    createDTime: '',
+    pageList: [
+        {
+            "Page": 0,
+            "FilePathSets": [
+                "", "", "", "", "",
+            ],
+            "Sets": [
+                { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 28, "Y": 50, "Width": 232, "Height": 54 }, "Page": 0, "BoxIndex": 1, "OcrSSIM": 1.0, "SrcText": "MeDiPro", "RefText": "MeDiPro", "Pass": false }],
+            "PassSets": [
+                {
+                    "Page": 0,
+                    "BoxIndex": 1,
+                    "Pass": true,
+                },
+            ]
+        }
+    ]
+};
+const reducer = (state, action) => {
+    switch (action.type) {
+        case 'fetch_success':
+            console.log(`REDUCER FETCH_SUCCESS : ${action.pageList}`);
+            return {
+                caseNo: action.caseNo,
+                createDTime: action.createDTime,
+                pageList: action.pageList,
+            };
+        case 'pass_check':
+            console.log(`REDUCER pass_check : ${state.caseNo} //// ${state.createDTime} index: ${action.boxIndex} page: ${action.pageNum}`);
+            let checkedState = Object.assign({}, state);
+            checkedState.pageList[action.pageNum].Sets.forEach(PassSet => {
+                if (PassSet.BoxIndex === action.boxIndex) {
+                    PassSet.Pass = true;
+                }
+            });
+            return checkedState;
+        default:
+            return state;
+    }
+}
 export const CaseContextProvider = ({ children }) => {
     const { caseNo, createDTime } = useParams();
-    let initData = {
-        caseNo: caseNo, 
-        createDTime: createDTime, 
-        pageList: [
-            {
-                "Page": 0,
-                "FilePathSets": [
-                    "","","","","",
-                ],
-                "Sets": [
-                    { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 28, "Y": 50, "Width": 232, "Height": 54 }, "Page": 0, "BoxIndex": 1, "OcrSSIM": 1.0, "SrcText": "MeDiPro", "RefText": "MeDiPro", "Pass": false }],
-                "PassSets": [
-                    {
-                        "Page": 0,
-                        "BoxIndex": 1,
-                        "Pass": true,
-                    },
-                ]
-            }
-        ]
-    };
-    const [pages, setPages] = useState(initData); //main data
     const navigate = useNavigate();
+    const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
-        console.log(caseNo + createDTime)
-        //fetchPageList();
-        fetchPageListTest();
+        fetchPageList();
+        //fetchPageListTest();
     }, []);
     const fetchPageList = async () => {
         try {
@@ -49,15 +67,18 @@ export const CaseContextProvider = ({ children }) => {
                 back();
             } else {
                 //turn to pass 
-                for (let i = 0; i < pageList.length; i++)
+                console.log(`PassSets 0 ${JSON.stringify(pageList[0].PassSets)}`)
+                for (let i = 0; i < pageList.length; i++) {
                     pageList[i].PassSets.forEach(PassSet => {
-                        const isPass = (element) => element.BoxIndex == PassSet.BoxIndex;
+                        const isPass = (element) => element.BoxIndex == PassSet.boxIndex;
                         let passIndex = pageList[0].Sets.findIndex(isPass);
                         if (passIndex != -1) {
                             pageList[i].Sets[passIndex].Pass = true;
                         }
                     });
-                setPages({ caseNo: caseNo, createDTime: createDTime, pageList: pageList });
+                }
+                //setPages({ caseNo: caseNo, createDTime: createDTime, pageList: pageList });
+                dispatch({ type: 'fetch_success', caseNo: caseNo, createDTime: createDTime, pageList: pageList })
             }
         } catch (error) {
             alert(error);
@@ -146,7 +167,7 @@ export const CaseContextProvider = ({ children }) => {
                 ]
             }
         ];
-        for (let i = 0; i < data.length; i++)
+        for (let i = 0; i < data.length; i++) {
             data[i].PassSets.forEach(PassSet => {
                 const isPass = (element) => element.BoxIndex == PassSet.BoxIndex;
                 let passIndex = data[0].Sets.findIndex(isPass);
@@ -154,23 +175,26 @@ export const CaseContextProvider = ({ children }) => {
                     data[i].Sets[passIndex].Pass = true;
                 }
             });
+        }
         console.log(`heres get fake pages ${data}`)
-        setPages({ caseNo: caseNo, createDTime: createDTime, pageList: data });
+        // setPages({ caseNo: caseNo, createDTime: createDTime, pageList: data });
+        dispatch({ type: 'fetch_success', caseNo: caseNo, createDTime: createDTime, pageList: data })
     };
     const back = () => {
         navigate(-1);
     }
     return (
-        <CaseContext.Provider value={{ pages }}>
+        <CaseContext.Provider value={{ pages: state, setDispatch: dispatch }}>
             {children}
         </CaseContext.Provider>
     );
 }
 
-export function useAPI() {
+export const useAPI = () => {
     const context = useContext(CaseContext);
     if (context === undefined) {
         throw new Error("Context must be used within a Provider");
     }
     return context;
 }
+
