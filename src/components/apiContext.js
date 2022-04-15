@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, createContext, useReducer } from "react";
+import React, { useContext, useEffect, createContext, useReducer } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../API';
 const CaseContext = createContext();
@@ -50,8 +50,8 @@ export const CaseContextProvider = ({ children }) => {
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
-        fetchPageList();
-        //fetchPageListTest();
+        //fetchPageList();
+        fetchPageListTest();
     }, []);
     const fetchPageList = async () => {
         try {
@@ -70,9 +70,9 @@ export const CaseContextProvider = ({ children }) => {
                 console.log(`PassSets 0 ${JSON.stringify(pageList[0].PassSets)}`)
                 for (let i = 0; i < pageList.length; i++) {
                     pageList[i].PassSets.forEach(PassSet => {
-                        const isPass = (element) => element.BoxIndex == PassSet.boxIndex;
+                        const isPass = (element) => element.BoxIndex === PassSet.boxIndex;
                         let passIndex = pageList[0].Sets.findIndex(isPass);
-                        if (passIndex != -1) {
+                        if (passIndex !== -1) {
                             pageList[i].Sets[passIndex].Pass = true;
                         }
                     });
@@ -169,9 +169,9 @@ export const CaseContextProvider = ({ children }) => {
         ];
         for (let i = 0; i < data.length; i++) {
             data[i].PassSets.forEach(PassSet => {
-                const isPass = (element) => element.BoxIndex == PassSet.BoxIndex;
+                const isPass = (element) => element.BoxIndex === PassSet.BoxIndex;
                 let passIndex = data[0].Sets.findIndex(isPass);
-                if (passIndex != -1) {
+                if (passIndex !== -1) {
                     data[i].Sets[passIndex].Pass = true;
                 }
             });

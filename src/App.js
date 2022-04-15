@@ -14,16 +14,15 @@ const Layout = (props) => (
   </>
 )
 const App = () => {
-  let homePage = "ScanDoc";
+  //let homePage = "/";
   return(
   <>
     <Layout>
       <Routes>
-        <Route path={homePage} element={<Home />} />
+        <Route path='/' element={<Home />} />
         <Route path='/:caseNo/:createDTime' element={<Detail />} />
         <Route path='/CreateNew' element={<CreateNew />} />
-        <Route path='/' element={<Navigate to={homePage} replace />} />
-        <Route path='*' element={<Navigate to={homePage} replace />} />
+        <Route path='*' element={<Navigate to={'/'} replace />} />
       </Routes>
     </Layout>
     <GlobalStyle />

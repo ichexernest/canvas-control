@@ -76,8 +76,8 @@ const Home = () => {
     const [eDate, setEDate] = useState(initEDate);
 
     useEffect(() => {
-        fetchCase(sDate, eDate);
-        //fetchCaseTest(sDate, eDate);
+        //fetchCase(sDate, eDate);
+        fetchCaseTest(sDate, eDate);
     }, [])
     const fetchCase = async (searchTermS, searchTermE) => {
         try {
@@ -121,12 +121,18 @@ const Home = () => {
         setEDate(searchTermE);
     };
 
+    const fetchAuth =async ()=>{
+        const data = await API.authenticate("N000174800", "N000174800");
+        console.log(data);
+    }
+
     return (
         <Wrapper>
             <ControlWrapper>
                 <Link to={`/CreateNew`}>
                     <NewBtn>+ 立案</NewBtn>
                 </Link>
+                {/* <button onClick={()=>{fetchAuth()}}>test auth</button> */}
                 <SearchBar fetchCase={fetchCase} sDate={sDate} eDate={eDate} initSDate={initSDate} initEDate={initEDate} />
             </ControlWrapper>
             {data !== null ?
