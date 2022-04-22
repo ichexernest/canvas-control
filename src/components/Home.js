@@ -76,8 +76,8 @@ const Home = () => {
     const [eDate, setEDate] = useState(initEDate);
 
     useEffect(() => {
-        //fetchCase(sDate, eDate);
-        fetchCaseTest(sDate, eDate);
+        fetchCase(sDate, eDate);
+        //fetchCaseTest(sDate, eDate);
     }, [])
     const fetchCase = async (searchTermS, searchTermE) => {
         try {
@@ -85,7 +85,7 @@ const Home = () => {
             let szECreateDTime = searchTermE ? searchTermE.replaceAll('-', '') : '';
             console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
             const data = await API.getCase(szSCreateDTime, szECreateDTime);
-            console.log(data.d);
+            //console.log(data.d);
             setData(JSON.parse(data.d));
             setSDate(searchTermS);
             setEDate(searchTermE);
@@ -120,11 +120,6 @@ const Home = () => {
         setSDate(searchTermS);
         setEDate(searchTermE);
     };
-
-    const fetchAuth =async ()=>{
-        const data = await API.authenticate("N000174800", "N000174800");
-        console.log(data);
-    }
 
     return (
         <Wrapper>

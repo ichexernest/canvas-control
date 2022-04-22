@@ -1,5 +1,6 @@
 const BASE_URL='http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx';
 const AUTH_URL='http://10.3.226.14/FPGSecurityService/UserAuthentication.asmx';
+const SEC_URL='http://10.3.226.14/FPGSecurityService/SecurityService.asmx';
 const defaultConfig = {
   method: 'POST',
   headers: {
@@ -54,7 +55,7 @@ const apiSettings = {
     return await data;
   },
   authenticate: async (userId, userPassword)=>{
-    const url = `${AUTH_URL}/ModifiedBoxPass`;
+    const url = `${AUTH_URL}/Authenticate`;
     const bodyData = {
       'p_szUserID': userId,
       'p_szUserPassword': userPassword,
@@ -66,7 +67,23 @@ const apiSettings = {
       })
     ).json();
     return await data;
+  },
+  login: async (userId, userPassword,appNAme)=>{
+    const url = `${SEC_URL}/Login`;
+    const bodyData = {
+      'p_szUserID': userId,
+      'p_szUserPassword': userPassword,
+      'p_szApplicationName': appNAme,
+    };
+    const data = await (
+      await fetch(url, {
+        ...defaultConfig,
+        body: JSON.stringify(bodyData)
+      })
+    ).json();
+    return await data;
   }
+  
 };
 
 export default apiSettings;

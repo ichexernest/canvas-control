@@ -8,6 +8,7 @@ max-height: 50px;
 min-height:  50px;
 padding:0;
 display:flex;
+justify-content: space-between; 
 align-items:center;
 border-bottom: 1px solid var(--lightGrey);
 `;
@@ -30,5 +31,29 @@ border-radius: 5px;
 }
 :click{
     color:var(--lightGrey);
+}
+`;
+export const Button = styled.button`
+background-color: var(--white);
+border: 1px solid var(--primary);
+color: var(--primary);
+padding: 5px 15px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+margin: 20px;
+transition-duration: 0.4s;
+cursor: pointer;
+border-radius: 5px;
+:hover{
+    background-color: var(--tableActionColor);
+}
+[disabled=disabled], :disabled {
+    background-color: var(--btnDisabledColor);
+    :hover{
+        background-color: var(--btnDisabledColor);
+        cursor:no-drop;
+    }
 }
 `;

@@ -50,8 +50,8 @@ export const CaseContextProvider = ({ children }) => {
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(reducer, initialState);
     useEffect(() => {
-        //fetchPageList();
-        fetchPageListTest();
+        fetchPageList();
+        //fetchPageListTest();
     }, []);
     const fetchPageList = async () => {
         try {

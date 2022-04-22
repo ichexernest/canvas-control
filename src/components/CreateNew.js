@@ -91,7 +91,7 @@ const CreateNew = () => {
         <>
             <Wrapper>
                 <div style={{ display: 'flex' }}>
-                    <Link to='/'>
+                    <Link to='/Home'>
                         <NewBtn><FontAwesomeIcon className="icon" icon={faArrowLeft} /></NewBtn>
                     </Link >
                     <Title>立案新增</Title>
