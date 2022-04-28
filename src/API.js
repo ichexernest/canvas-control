@@ -1,6 +1,8 @@
-const BASE_URL='http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx';
-const AUTH_URL='http://10.3.226.14/FPGSecurityService/UserAuthentication.asmx';
-const SEC_URL='http://10.3.226.14/FPGSecurityService/SecurityService.asmx';
+import { getAuthToken } from "./Util";
+// const BASE_URL='http://lbftcaivm01/FPGProcessService/DocSimilar/DocPage.asmx';
+// const AUTH_URL='http://10.3.226.14/FPGSecurityService/UserAuthentication.asmx';
+// const SEC_URL='http://10.3.226.14/FPGSecurityService/SecurityService.asmx';
+// const APP_NAME ='canvas-control';
 const defaultConfig = {
   method: 'POST',
   headers: {
@@ -11,7 +13,7 @@ const defaultConfig = {
 
 const apiSettings = {
   getCase: async (p_szSCrateDTime, p_szECrateDTime) => {
-    const url = `${BASE_URL}/FindCase`;
+    const url = `${process.env.REACT_APP_BASE_URL}/FindCase`;
     const bodyData = {
       'p_szSCreateDTime': p_szSCrateDTime,
       'p_szECreateDTime': p_szECrateDTime
@@ -25,7 +27,7 @@ const apiSettings = {
     return await data;
   },
   getPageList: async (caseNo, createDTime) => {
-    const url = `${BASE_URL}/GetAllPage`;
+    const url = `${process.env.REACT_APP_BASE_URL}/GetAllPage`;
     const bodyData = {
       'p_szCaseNo': caseNo,
       'p_szCreateDTime': createDTime
@@ -39,7 +41,7 @@ const apiSettings = {
     return await data;
   },
   modifiedBoxPass: async (caseNo, createDTime, page, boxIndex) => {
-    const url = `${BASE_URL}/ModifiedBoxPass`;
+    const url = `${process.env.REACT_APP_BASE_URL}/ModifiedBoxPass`;
     const bodyData = {
       'p_szCaseNo': caseNo,
       'p_szCreateDTime': createDTime,
@@ -55,7 +57,7 @@ const apiSettings = {
     return await data;
   },
   authenticate: async (userId, userPassword)=>{
-    const url = `${AUTH_URL}/Authenticate`;
+    const url = `${process.env.REACT_APP_AUTH_URL}/Authenticate`;
     const bodyData = {
       'p_szUserID': userId,
       'p_szUserPassword': userPassword,
@@ -68,12 +70,12 @@ const apiSettings = {
     ).json();
     return await data;
   },
-  login: async (userId, userPassword,appNAme)=>{
-    const url = `${SEC_URL}/Login`;
+  login: async (userId, userPassword)=>{
+    const url = `${process.env.REACT_APP_SEC_URL}/Login`;
     const bodyData = {
       'p_szUserID': userId,
       'p_szUserPassword': userPassword,
-      'p_szApplicationName': appNAme,
+      'p_szApplicationName': process.env.REACT_APP_NAME,
     };
     const data = await (
       await fetch(url, {
@@ -81,8 +83,20 @@ const apiSettings = {
         body: JSON.stringify(bodyData)
       })
     ).json();
+    return await data.d;
+  },
+  getUser:async ()=>{
+    const url = `${process.env.REACT_APP_SEC_URL}/GetUser`;
+    const token = getAuthToken();
+    const data = await (
+      await fetch(url, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+    ).json().catch(err=>console.log(err));
     return await data;
-  }
+  },
   
 };
 

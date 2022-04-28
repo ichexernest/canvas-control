@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Wrapper, Info, CheckDiv, Button } from './DetailInfo.styles';
 import { useAPI } from "../apiContext";
 import API from '../../API';
-const DetailInfo = ({ index, pageIndex }) => {
+const DetailInfo = ({ targetIndex, pageIndex }) => {
     const [disabled, setDisabled] = useState(true); //check button disabled
     const { pages, setDispatch } = useAPI();
     const handleCheck = (i) => {
@@ -26,21 +26,21 @@ const DetailInfo = ({ index, pageIndex }) => {
     }
     useEffect(() => {
         setDisabled(
-            pages.pageList[pageIndex].Sets[index].Pass
-            || pages.pageList[pageIndex].Sets[index].OcrSSIM === 1 ? true : false);
-    }, [pages.pageList, pageIndex, index])
+            pages.pageList[pageIndex].Sets[targetIndex].Pass
+            || pages.pageList[pageIndex].Sets[targetIndex].OcrSSIM === 1 ? true : false);
+    }, [pages.pageList, pageIndex, targetIndex])
 
     return (
         <Wrapper>
             <Info>
-                <strong>src:</strong>{pages.pageList[pageIndex].Sets[index].SrcText}<br />
-                <strong>ref:</strong>{pages.pageList[pageIndex].Sets[index].RefText}<br />
-                <strong>ocr SSIM:</strong>{pages.pageList[pageIndex].Sets[index].OcrSSIM}<br />
-                <strong>SSIM:</strong>{pages.pageList[pageIndex].Sets[index].Ssim}<br />
-                <strong>qatm score:</strong>{pages.pageList[pageIndex].Sets[index].Qatm_score}<br />
+                <strong>src:</strong>{pages.pageList[pageIndex].Sets[targetIndex].SrcText}<br />
+                <strong>ref:</strong>{pages.pageList[pageIndex].Sets[targetIndex].RefText}<br />
+                <strong>ocr SSIM:</strong>{pages.pageList[pageIndex].Sets[targetIndex].OcrSSIM}<br />
+                <strong>SSIM:</strong>{pages.pageList[pageIndex].Sets[targetIndex].Ssim}<br />
+                <strong>qatm score:</strong>{pages.pageList[pageIndex].Sets[targetIndex].Qatm_score}<br />
             </Info>
             <CheckDiv>
-                <Button disabled={disabled} onClick={() => handleCheck(pages.pageList[pageIndex].Sets[index].BoxIndex)}>manual checked</Button>
+                <Button disabled={disabled} onClick={() => handleCheck(pages.pageList[pageIndex].Sets[targetIndex].BoxIndex)}>manual checked</Button>
             </CheckDiv>
         </Wrapper>
     )

@@ -94,9 +94,9 @@ export const CaseContextProvider = ({ children }) => {
                 "FilePathSets": [
                     "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
                     "http://upload.wikimedia.org/wikipedia/commons/3/32/EVD_Document1.jpg",
-                    "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
-                    "http://upload.wikimedia.org/wikipedia/commons/3/32/EVD_Document1.jpg",
-                    "https://i.epochtimes.com/assets/uploads/2021/11/id13392306-3526-2021-11-23-093833.jpg",
+                    "https://web-tuts.com/abc_content/uploads/2021/01/jQuery-Get-Image-Src-and-Set-Image-Src.fw-min-750x445.png",
+                    "https://c0.wallpaperflare.com/preview/104/979/585/india-sikkim-lake-mountent-thumbnail.jpg",
+                    "https://w0.peakpx.com/wallpaper/370/878/HD-wallpaper-hogwarts-express-potter-harry-viaduct-glenfinnan.jpg",
                 ],
                 "Sets": [
                     { "Index": 0, "Ssim": 0.0, "Qatm_score": 0.0, "Rect": { "X": 28, "Y": 50, "Width": 232, "Height": 54 }, "Page": 0, "BoxIndex": 1, "OcrSSIM": 1.0, "SrcText": "MeDiPro", "RefText": "MeDiPro", "Pass": false },

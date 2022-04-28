@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { React, useState } from "react";
-import { useAuth } from "../App";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../authContext";
 const Wrapper = styled.div`
-max-height: 92vh;
-height: 92vh;
 width: 960px;
 margin:100px auto 0;
 display: flex;
@@ -49,7 +47,7 @@ color: var(--darkGrey);
 outline:none;
 }
 }
-`; 
+`;
 const Button = styled.button`
 background-color: rgb(34, 20, 95);
 border: 1px solid rgb(124, 110, 185);
@@ -75,28 +73,26 @@ border-radius: 5px;
 }
 `;
 const Login = () => {
-    const {onLogin} = useAuth();
+    const { onLogin } = useAuth();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
     const handleSubmit = async e => {
         e.preventDefault();
-        console.log("ddwdwdwdwwww")
-        onLogin(username,password);
+        onLogin(username, password);
     }
 
     return (
         <Wrapper>
-            <Title>文件辨識檢視系統</Title>
+            <Title>{process.env.REACT_APP_NAME}</Title>
             <form onSubmit={handleSubmit}>
-                    <InputLabel>Username</InputLabel>
-                    <InputContent><input type="text" onChange={e => setUsername(e.target.value)} /></InputContent>
-                    <InputLabel>Password</InputLabel>
-                    <InputContent><input type="password" onChange={e => setPassword(e.target.value)} /></InputContent>
-                    <Button type="submit">登入</Button>
+                <InputLabel>Username</InputLabel>
+                <InputContent><input type="text" onChange={e => setUsername(e.target.value)} /></InputContent>
+                <InputLabel>Password</InputLabel>
+                <InputContent><input type="password" onChange={e => setPassword(e.target.value)} /></InputContent>
+                <Button type="submit">登入</Button>
             </form>
         </Wrapper>
     );
 }
-
 export default Login;

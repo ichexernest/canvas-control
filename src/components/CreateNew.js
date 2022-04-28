@@ -81,12 +81,22 @@ const CreateNew = () => {
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
+        console.log(name, value, event.target)
         setInputs(values => ({ ...values, [name]: value }))
     }
-    const handleSubmitE = (event) => {
-        event.preventDefault();
-        alert(JSON.stringify(inputs));
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        let formData = inputs;
+        formData.uploadTime = convertDate(Date.now());
+        console.log(formData);
     }
+
+    const convertDate = (date) => {
+        let dt = new Date(date);
+        let nowDate = `${dt.getFullYear().toString().padStart(4, '0')}${(dt.getMonth() + 1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}${dt.getHours().toString().padStart(2, '0')}${dt.getMinutes().toString().padStart(2, '0')}${dt.getSeconds().toString().padStart(2, '0')}`;
+        return nowDate;
+    }
+
     return (
         <>
             <Wrapper>
@@ -96,8 +106,9 @@ const CreateNew = () => {
                     </Link >
                     <Title>立案新增</Title>
                 </div>
-                <form onSubmit={handleSubmitE}>
-                    <FileUploader />
+                <form onSubmit={handleSubmit}>
+                    <FileUploader setInputs={setInputs}
+                        onFileSelectError={({ error }) => alert(error)} />
                     <InputLabel>信箱</InputLabel>
                     <InputContent>
                         <input
@@ -124,15 +135,6 @@ const CreateNew = () => {
                             value={inputs.uploader || ""}
                             onChange={handleChange}
                             placeholder="uploader" />
-                    </InputContent>
-                    <InputLabel>上傳時間</InputLabel>
-                    <InputContent>
-                        <input
-                            type="text"
-                            name="uploadTime"
-                            value={inputs.uploadTime || ""}
-                            onChange={handleChange}
-                            placeholder="uploadTime" />
                     </InputContent>
                     <NewBtn type="submit">建立</NewBtn>
                 </form>

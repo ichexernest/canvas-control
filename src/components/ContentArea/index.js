@@ -9,11 +9,9 @@ import { useAPI } from "../apiContext";
 const ContentArea = ({ activePageId }) => {
     const [activeTargetId, setActiveTargetId] = useState(0); //active ocr area
     const [activePathId, setActivePathId] = useState(0); //active file display Display
-    const [isAlign, setIsAlign] = useState(true); //Only align pattern show detection block
     const { pages } = useAPI();
     const handleCurrFile = (i) => {
         setActivePathId(i);
-        i !== 0 ? setIsAlign(false) : setIsAlign(true);
     }
     useEffect(() => {
         setActiveTargetId(0)
@@ -42,32 +40,32 @@ const ContentArea = ({ activePageId }) => {
                     setActiveTargetId={setActiveTargetId} />
                 {pages.pageList[activePageId].Sets[activeTargetId] ?
                     <ContentCanvas
-                        index={activeTargetId}
+                        targetIndex={activeTargetId}
                         pageIndex={activePageId}
                         pathIndex={activePathId}
-                        isAlign={isAlign} /> :
+                    /> :
                     <ContentCanvas
-                        index={0}
+                        targetIndex={0}
                         pageIndex={activePageId}
                         pathIndex={activePathId}
-                        isAlign={isAlign} />}
+                    />}
             </Grid>
             <Grid isMain={false}>
                 {pages.pageList[activePageId].Sets[activeTargetId] ?
                     <DetailInfo
-                        index={activeTargetId}
+                        targetIndex={activeTargetId}
                         pageIndex={activePageId} />
                     : <DetailInfo
-                        index={0}
+                        targetIndex={0}
                         pageIndex={activePageId} />
                 }
                 {pages.pageList[activePageId].Sets[activeTargetId] ?
                     <DetailCanvas
-                        index={activeTargetId}
+                        targetIndex={activeTargetId}
                         pageIndex={activePageId} />
                     :
                     <DetailCanvas
-                        index={0}
+                        targetIndex={0}
                         pageIndex={activePageId} />
                 }
 
