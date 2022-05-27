@@ -35,8 +35,8 @@ border-radius: 5px;
 `;
 export const Button = styled.button`
 background-color: var(--white);
-border: 1px solid var(--primary);
 color: var(--primary);
+border: 0;
 padding: 5px 15px;
 text-align: center;
 text-decoration: none;
@@ -47,7 +47,7 @@ transition-duration: 0.4s;
 cursor: pointer;
 border-radius: 5px;
 :hover{
-    background-color: var(--tableActionColor);
+    background-color: var(--lightGrey);
 }
 [disabled=disabled], :disabled {
     background-color: var(--btnDisabledColor);

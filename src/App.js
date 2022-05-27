@@ -1,6 +1,6 @@
-import React, { useState, createContext, useContext } from 'react';
+import React from 'react';
 //routing
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import { GlobalStyle } from './GlobalStyle';
 import Home from './components/Home';
@@ -9,7 +9,7 @@ import Header from './components/Header';
 import CreateNew from './components/CreateNew';
 import Login from './components/Login';
 import { AuthProvider, useAuth } from "./authContext";
-
+import { getAuthToken } from "./Util";
 const App = () => {
   return (
     <AuthProvider>
@@ -31,7 +31,8 @@ const App = () => {
 const ProtectedRoute = ({ children }) => {
   const { token } = useAuth();
   const location = useLocation();
-  if (!token) {
+  const userLogin= getAuthToken();
+  if (!userLogin && !token) {
     return <Navigate to="/Login" replace state={{ from: location }} />;
   }
   return children;

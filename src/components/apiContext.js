@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, createContext, useReducer } from "react";
+import React, { useContext, useEffect, createContext, useReducer, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../API';
+import ModalCard from "./ModalCard";
 const CaseContext = createContext();
 const initialState = {
     caseNo: '',
@@ -49,10 +50,15 @@ export const CaseContextProvider = ({ children }) => {
     const { caseNo, createDTime } = useParams();
     const navigate = useNavigate();
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [show, setShow]= useState(false);
+    const message = "file fetch error !!";
     useEffect(() => {
         fetchPageList();
         //fetchPageListTest();
     }, []);
+    const handleError = ()=>{
+        setShow(true);
+    }
     const fetchPageList = async () => {
         try {
             console.log(`here gets caseNo: ${caseNo} & createDTime: ${createDTime}`);
@@ -60,10 +66,10 @@ export const CaseContextProvider = ({ children }) => {
             const pageList = JSON.parse(data.d);
             //console.log(`data d parsr ::${pageList.length}::: ${pageList[0].Sets}`);
             if (pageList.length === 0 || pageList === null) {
-                alert(`no page data`);
+                handleError();
                 back();
             } else if (pageList[0].Sets.length === 0) {
-                alert(`no Sets in page`);
+                handleError();
                 back();
             } else {
                 //turn to pass 
@@ -185,6 +191,7 @@ export const CaseContextProvider = ({ children }) => {
     }
     return (
         <CaseContext.Provider value={{ pages: state, setDispatch: dispatch }}>
+            <ModalCard show={show} setShow={setShow} content={message}  showLoading={false}></ModalCard>
             {children}
         </CaseContext.Provider>
     );

@@ -46,9 +46,19 @@ border-radius:10px;
 display:flex;
 flex-direction:column;
 align-items:center;
+margin:0 10px;
 p{
     color:var(--black);
     margin:auto;
 }
 h2{color:var(--primary)}
+`;
+
+export const Loading = styled.div`
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items: center;
+color:var(--primary);
 `;

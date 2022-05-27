@@ -10,6 +10,13 @@ const defaultConfig = {
     'Content-Type': 'application/json'
   }
 };
+const uploadConfig={
+  method: 'POST',
+  headers:{
+    'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+    'Content-Type': 'multipart/form-data'
+  }
+}
 
 const apiSettings = {
   getCase: async (p_szSCrateDTime, p_szECrateDTime) => {
@@ -56,6 +63,18 @@ const apiSettings = {
     ).json();
     return await data;
   },
+  createCase: async (formData) => {
+    const url = `${process.env.REACT_APP_BASE_URL}/CreateCase`;
+    // const bodyData = {
+    // };
+    const data = await (
+      await fetch(url, {
+        ...uploadConfig,
+        body:formData
+      })
+    ).json();
+    return await data;
+  },
   authenticate: async (userId, userPassword)=>{
     const url = `${process.env.REACT_APP_AUTH_URL}/Authenticate`;
     const bodyData = {
@@ -85,18 +104,18 @@ const apiSettings = {
     ).json();
     return await data.d;
   },
-  getUser:async ()=>{
-    const url = `${process.env.REACT_APP_SEC_URL}/GetUser`;
-    const token = getAuthToken();
-    const data = await (
-      await fetch(url, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-    ).json().catch(err=>console.log(err));
-    return await data;
-  },
+  // getUser:async ()=>{
+  //   const url = `${process.env.REACT_APP_SEC_URL}/GetUser`;
+  //   const token = getAuthToken();
+  //   const data = await (
+  //     await fetch(url, {
+  //       headers: {
+  //         authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //   ).json().catch(err=>console.log(err));
+  //   return await data;
+  // },
   
 };
 

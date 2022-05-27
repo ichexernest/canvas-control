@@ -65,7 +65,7 @@ const Sidebar = ({ setActivePageId, activePageId }) => {
                         return (
                             <li key={item.Page} className={liClasses} onClick={() => handleSelectTarget(index)} >
                                 <img src={item.FilePathSets[0]} alt={item.Page} />
-                                page: {item.Page}
+                                頁數: {item.Page}
                             </li>)
                     })}
             </ul>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../authContext";
 const Wrapper = styled.div`
 width: 960px;
@@ -76,7 +76,7 @@ const Login = () => {
     const { onLogin } = useAuth();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-
+    localStorage.clear();
     const handleSubmit = async e => {
         e.preventDefault();
         onLogin(username, password);

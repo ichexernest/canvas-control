@@ -20,15 +20,16 @@ const ContentArea = ({ activePageId }) => {
     return (
         <Wrapper>
             <ControlBar>
-                <h3>{`${pages.caseNo} page:${pages.pageList[activePageId].Page}`}</h3>
+                <h3>{`${pages.caseNo} 頁數:${pages.pageList[activePageId].Page}`}</h3>
                 <ActionGroup>
                     {pages.pageList[activePageId].FilePathSets.map((item, index) => {
-                        const btnTextIndex = ["align overlay", "original overlay", "source", "reference", "source(align)"];
+                        //const btnTextIndex = ["align overlay", "original overlay", "source", "reference", "source(align)"];
+                        const btnTextIndexTC = ["對齊比對", "原始比對", "擬校稿文件", "參考文件", "擬校稿文件(對齊)"];
                         let btnClasses = classNames({
                             'active': (activePathId === index) ? true : false,
                         });
                         return (
-                            <Button key={"filePath_" + index} className={btnClasses} onClick={() => handleCurrFile(index)}>{btnTextIndex[index]}</Button>
+                            <Button key={"filePath_" + index} className={btnClasses} onClick={() => handleCurrFile(index)}>{btnTextIndexTC[index]}</Button>
                         )
                     })}
                 </ActionGroup>
@@ -88,7 +89,7 @@ const ListItem = ({ setActiveTargetId, activeTargetId, pageIndex }) => {
 
     return (
         <ContentList>
-            <ToggleButton onClick={() => changeList()}>show all/issue only </ToggleButton>
+            <ToggleButton onClick={() => changeList()}>顯示全部 / 僅顯示標註項目</ToggleButton>
             <ul>
                 {pages.pageList[pageIndex].Sets.map((item, index) => {
                     let liClasses = classNames({

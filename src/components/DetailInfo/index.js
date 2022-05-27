@@ -40,7 +40,7 @@ const DetailInfo = ({ targetIndex, pageIndex }) => {
                 <strong>qatm score:</strong>{pages.pageList[pageIndex].Sets[targetIndex].Qatm_score}<br />
             </Info>
             <CheckDiv>
-                <Button disabled={disabled} onClick={() => handleCheck(pages.pageList[pageIndex].Sets[targetIndex].BoxIndex)}>manual checked</Button>
+                <Button disabled={disabled} onClick={() => handleCheck(pages.pageList[pageIndex].Sets[targetIndex].BoxIndex)}>標註為相符</Button>
             </CheckDiv>
         </Wrapper>
     )

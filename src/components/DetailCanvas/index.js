@@ -64,7 +64,7 @@ const DetailCanvas = ({targetIndex,pageIndex}) => {
     return (
         <Wrapper>
             <Box>
-                <BoxText>source</BoxText>
+                <BoxText>局部特寫(擬校稿文件)</BoxText>
                 <PanZoom
                     boundaryRatioVertical={0.9}
                     boundaryRatioHorizontal={0.9}
@@ -73,7 +73,7 @@ const DetailCanvas = ({targetIndex,pageIndex}) => {
                 </PanZoom>
             </Box>
             <Box>
-                <BoxText>reference</BoxText>
+                <BoxText>局部特寫(參考文件)</BoxText>
                 <PanZoom
                     boundaryRatioVertical={0.9}
                     boundaryRatioHorizontal={0.9}

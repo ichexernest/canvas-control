@@ -26,7 +26,7 @@ const DetailLink = ({ caseNo, createDTime}) => {
       {(
         <Link to={`/${caseNo}/${createDTime}`}>
         <Button>
-          go        <FontAwesomeIcon className="icon" icon={faArrowRight} />
+          查看        <FontAwesomeIcon className="icon" icon={faArrowRight} />
         </Button>
         </Link>
 

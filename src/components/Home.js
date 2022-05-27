@@ -86,7 +86,13 @@ const Home = () => {
             console.log(`heres get range ${szSCreateDTime} to ${szECreateDTime}`)
             const data = await API.getCase(szSCreateDTime, szECreateDTime);
             //console.log(data.d);
-            setData(JSON.parse(data.d));
+            const result = filter(JSON.parse(data.d), function (element) {
+                //if (element.Vhno === 'Case01')
+                    return true;
+                //return false;
+            });
+            console.log(result);
+            setData(result);
             setSDate(searchTermS);
             setEDate(searchTermE);
         } catch (error) {
@@ -120,7 +126,18 @@ const Home = () => {
         setSDate(searchTermS);
         setEDate(searchTermE);
     };
+    function filter(collection, predicate) {
+        var result = [];
+        var length = collection.length;
 
+        for (var j = 0; j < length; j++) {
+            if (predicate(collection[j]) === true) {
+                result.push(collection[j]);
+            }
+        }
+
+        return result;
+    }
     return (
         <Wrapper>
             <ControlWrapper>

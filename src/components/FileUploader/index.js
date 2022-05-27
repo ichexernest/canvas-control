@@ -25,7 +25,10 @@ const FileUploader = ({setInputs,onFileSelectError}) => {
     else setFileRName(e.target.files[0].name)
 
     const arrayBuffer = await getArrayBuffer(e.target.files[0]);
-    setInputs(values => ({ ...values, [name]: Array.from(new Uint8Array(arrayBuffer)) }))
+
+    //setInputs(values => ({ ...values, [name]: Array.from(new Uint8Array(arrayBuffer)), [name+'Type']: e.target.files[0].type}))
+    setInputs(values => ({ ...values, [name]: e.target.files[0]}))
+
     console.log('arrayBuffer', arrayBuffer, checkSize, checkType);
     //const response = await uploadFile(arrayBuffer, name);
   }
@@ -86,7 +89,7 @@ const FileUploader = ({setInputs,onFileSelectError}) => {
       <label>
         <input name="source" type="file" onChange={handleUpload} />
         <FontAwesomeIcon className="icon" icon={faFile} size="4x" />
-        <h3>來源文件</h3>
+        <h3>擬校稿文件</h3>
         <p>{fileSName}</p>
         <button>選擇檔案</button>
       </label>

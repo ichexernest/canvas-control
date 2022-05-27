@@ -4,6 +4,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import FileUploader from "./FileUploader";
+import ModalCard from "./ModalCard";
+import API from '../API';
 const Wrapper = styled.div`
 max-height: 92vh;
 height: 92vh;
@@ -77,7 +79,17 @@ outline:none;
 }
 `;
 const CreateNew = () => {
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({
+        description:'',
+        mail:'',
+        source:{},
+        reference:{},
+        uploadTime:'',
+        uploader:''
+    });
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [content, setContent] = useState("");
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -86,19 +98,46 @@ const CreateNew = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        let formData = inputs;
-        formData.uploadTime = convertDate(Date.now());
-        console.log(formData);
+        setShow(true);
+        setLoading(true);
+        let submitData = inputs;
+        submitData.uploadTime = convertDate(Date.now());
+        let formData = new FormData();
+        for ( var key in submitData ) {
+            formData.append(key, submitData[key]);
+        }
+        createCase(formData);
+        console.log(submitData);
     }
+    const createCase = async (formData) => {
+        try {
+            const iCount = await API.createCase(formData);
+            console.log(iCount);
+            setContent("成功");
+            setShow(true);
+            setLoading(false);
+        } catch (error) {
+           // alert(error);
+            setContent("失敗");
+            setShow(true);
+            setLoading(false);
+        }
+    };
 
     const convertDate = (date) => {
         let dt = new Date(date);
         let nowDate = `${dt.getFullYear().toString().padStart(4, '0')}${(dt.getMonth() + 1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}${dt.getHours().toString().padStart(2, '0')}${dt.getMinutes().toString().padStart(2, '0')}${dt.getSeconds().toString().padStart(2, '0')}`;
         return nowDate;
     }
+    const handleError = (error)=>{
+        setContent(error);
+        setShow(true);
+        setLoading(false);
+    }
 
     return (
         <>
+        <ModalCard show={show} setShow={setShow} content={content} showLoading={loading}></ModalCard>
             <Wrapper>
                 <div style={{ display: 'flex' }}>
                     <Link to='/Home'>
@@ -108,7 +147,7 @@ const CreateNew = () => {
                 </div>
                 <form onSubmit={handleSubmit}>
                     <FileUploader setInputs={setInputs}
-                        onFileSelectError={({ error }) => alert(error)} />
+                        onFileSelectError={({error}) => handleError(error)} />
                     <InputLabel>信箱</InputLabel>
                     <InputContent>
                         <input

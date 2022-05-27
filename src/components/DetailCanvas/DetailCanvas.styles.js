@@ -17,13 +17,13 @@ export const BoxText = styled.div`
     position:absolute;
     bottom:0;
     z-index:500;
-    width:80px;
     font-size:14px;
     padding:5px;
     color:var(--white);
     background-color: var(--primary);
     opacity:.5;
     text-align:center;
+    white-space:nowrap;
 `;
 export const Canvas = styled.canvas`
 background-color: var(--bgMaskColor);
