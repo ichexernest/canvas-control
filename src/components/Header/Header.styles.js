@@ -12,6 +12,13 @@ justify-content: space-between;
 align-items:center;
 border-bottom: 1px solid var(--lightGrey);
 `;
+export const AccountArea = styled.div`
+display:flex;
+width:180px;
+justify-content: space-between;
+align-items:center;
+color: var(--primary); 
+`;
 export const Logo = styled.button`
 background-color: var(--white);
 color: var(--primary);

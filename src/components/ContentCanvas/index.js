@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "react";
+import React,{ useEffect, useRef, useState, useCallback } from "react";
 import { Wrapper, Canvas, Loading } from './ContentCanvas.styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -11,10 +11,8 @@ const ContentCanvas = ({ targetIndex, pageIndex, pathIndex }) => {
     const pageBase = pages.pageList[pageIndex];
 
     const [loaded, setLoaded] = useState(false);
-
-    useEffect(() => { drawCanva() }, [targetIndex,pathIndex]);
-    const drawCanva = () => {
-        let count = 1;
+    const drawCanva = useCallback(() => {
+        //let count = 1;
         const canvasObj = canvasRef.current;
         const ctx = canvasObj.getContext('2d');
         const img = new Image();
@@ -32,11 +30,12 @@ const ContentCanvas = ({ targetIndex, pageIndex, pathIndex }) => {
                     pageBase.Sets[targetIndex].Rect.Y,
                     pageBase.Sets[targetIndex].Rect.Width,
                     pageBase.Sets[targetIndex].Rect.Height);
-                count--;
+                //count--;
             }
             setLoaded(true);
         }
-    }
+    },[targetIndex,pathIndex,pageBase]);
+    useEffect(() => { drawCanva() }, [drawCanva]);
     return (
         <Wrapper>
             <PanZoom

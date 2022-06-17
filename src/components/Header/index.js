@@ -1,24 +1,29 @@
 import { React } from "react";
-import { Wrapper,Logo,Button } from './Header.styles';
+import { Wrapper,Logo,Button,  AccountArea } from './Header.styles';
 import { Link  } from "react-router-dom";
 import { useAuth } from "../../authContext";
 import { getAuthToken } from "../../Util";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
-    const {token, onLogout} = useAuth();
-    const userLogin= getAuthToken();
+  const APP_NAME = process.env.REACT_APP_NAME;
+    const {onLogout} = useAuth();
+    const userLogin= JSON.parse(getAuthToken());
+
     return (
         <Wrapper>
             <Link to='/Home' style={{ textDecoration: 'none' }}>
-            <Logo>{process.env.REACT_APP_NAME}</Logo>
+            <Logo>{APP_NAME}</Logo>
             </Link >
             {userLogin && (
-              <>              
-              {/* <span>{token.HumanName}</span> */}
+              <AccountArea>    
+              <FontAwesomeIcon className="icon" icon={faUser} />          
+              <span>{userLogin.HumanName}</span>
               <Button type="button" onClick={onLogout}>
                 登出
               </Button>
-              </>
+              </AccountArea>
       )}
         </Wrapper>
     )

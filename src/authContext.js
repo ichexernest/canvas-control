@@ -8,7 +8,8 @@ import ModalCard from "./components/ModalCard";
 const fetchAuth = async (username, password) => {
     try {
         console.log(`here gets username: ${username} & password: ${password}`);
-        const data = await API.login(username, password);
+       // const data = await API.login(username, password);
+        const data = {UserId:'ss01'};
         console.log(data);
         return data;
     } catch (error) {
@@ -25,8 +26,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         let loggedInUser = getAuthToken();
         if (loggedInUser) {
-            const foundUser = loggedInUser;
-            setToken(foundUser);
+            setToken(JSON.stringify(loggedInUser));
         }
     }, []);
 
@@ -34,8 +34,9 @@ export const AuthProvider = ({ children }) => {
         //const token = await fakeAuth();
         const userData = await fetchAuth(username, password);
         if (userData) {
+            console.log("getuserdata"+JSON.stringify(userData));
             setToken(userData);
-            setAuthToken(userData);
+            setAuthToken(JSON.stringify(userData));
             const origin = location.state?.from?.pathname || '/Home';
             navigate(origin);
         }

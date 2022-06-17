@@ -73,6 +73,7 @@ border-radius: 5px;
 }
 `;
 const Login = () => {
+    const APP_NAME = process.env.REACT_APP_NAME;
     const { onLogin } = useAuth();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
@@ -84,7 +85,7 @@ const Login = () => {
 
     return (
         <Wrapper>
-            <Title>{process.env.REACT_APP_NAME}</Title>
+            <Title>{APP_NAME}</Title>
             <form onSubmit={handleSubmit}>
                 <InputLabel>Username</InputLabel>
                 <InputContent><input type="text" onChange={e => setUsername(e.target.value)} /></InputContent>
