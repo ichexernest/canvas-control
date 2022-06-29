@@ -10,7 +10,6 @@ const Header = () => {
   const APP_NAME = process.env.REACT_APP_NAME;
     const {onLogout} = useAuth();
     const userLogin= JSON.parse(getAuthToken());
-
     return (
         <Wrapper>
             <Link to='/Home' style={{ textDecoration: 'none' }}>
@@ -19,7 +18,7 @@ const Header = () => {
             {userLogin && (
               <AccountArea>    
               <FontAwesomeIcon className="icon" icon={faUser} />          
-              <span>{userLogin.HumanName}</span>
+              <span>{userLogin.d.HumanName}</span>
               <Button type="button" onClick={onLogout}>
                 登出
               </Button>

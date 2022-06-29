@@ -84,7 +84,7 @@ const CreateNew = () => {
     const [inputs, setInputs] = useState({
         source: {},
         reference: {},
-        mail: userLogin.Email,
+        mail: userLogin.d.Email,
         description: '',
         uploadTime: '',
         uploader: '',
@@ -95,7 +95,7 @@ const CreateNew = () => {
     const fetchCreateCase = async (formData) => {
         try {
             const iCount = await API.createCase(formData);
-            console.log(iCount);
+            console.log(`RETURN RESULT: ` + iCount);
             setContent("成功");
             setShow(true);
             setLoading(false);
@@ -126,7 +126,7 @@ const CreateNew = () => {
         e.preventDefault()
         let submitData = inputs;
         submitData.uploadTime = convertDate(Date.now());
-        submitData.uploader = userLogin.UserId;
+        submitData.uploader = userLogin.d.UserID;
         // console.log(submitData);
         console.log(JSON.stringify(submitData['source']));
         console.log(submitData['source']);
@@ -151,6 +151,16 @@ const CreateNew = () => {
         for (var key in submitData) {
             formData.append(key, submitData[key]);
         }
+
+        let oCase = {};
+        oCase.mail = submitData.mail;
+        oCase.uploader = submitData.uploader
+        oCase.description = submitData.description;
+
+        formData.append("source", submitData['source']);
+        formData.append("ref", submitData['reference']);
+        formData.append("p_oCase", JSON.stringify(oCase));
+
         console.log(submitData);
         setShow(true);
         setLoading(true);

@@ -8,12 +8,12 @@ import ModalCard from "./components/ModalCard";
 const fetchAuth = async (username, password) => {
     try {
         console.log(`here gets username: ${username} & password: ${password}`);
-       // const data = await API.login(username, password);
-        const data = {UserId:'ss01'};
+        const data = await API.login(username, password);
+        //const data = {UserId:'ss01'};
         console.log(data);
         return data;
     } catch (error) {
-        alert(error);
+        console.log(`login fail`);
     }
 };
 export const AuthProvider = ({ children }) => {
